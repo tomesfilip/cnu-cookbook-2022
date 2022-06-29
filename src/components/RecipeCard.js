@@ -8,11 +8,11 @@ const RecipeCard = ({ title, preparationTime, slug }) => {
     <Card className="h-100">
       <Link to={`/recipe/${slug}`} className="text-reset text-decoration-none">
         <CardImg src={placeholder} alt={title} top />
+        <CardBody>
+          <CardTitle tag="h5">{title}</CardTitle>
+          <CardSubtitle>{preparationTime} min</CardSubtitle>
+        </CardBody>
       </Link>
-      <CardBody>
-        <CardTitle tag="h5">{title}</CardTitle>
-        <CardSubtitle>{preparationTime} min</CardSubtitle>
-      </CardBody>
     </Card>
   );
 };
