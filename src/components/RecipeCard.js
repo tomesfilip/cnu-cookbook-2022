@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 import placeholder from '../images/food-placeholder.png';
 
-export function RecipeCard({ title, preparationTime, slug }) {
+const RecipeCard = ({ title, preparationTime, slug }) => {
   return (
     <Card className="h-100">
-      <Link to={`/recipe/${slug}`}>
-        <CardImg src={placeholder} alt="Preview" top />
+      <Link to={`/recipe/${slug}`} className="text-reset text-decoration-none">
+        <CardImg src={placeholder} alt={title} top />
       </Link>
       <CardBody>
         <CardTitle tag="h5">{title}</CardTitle>
@@ -15,4 +15,6 @@ export function RecipeCard({ title, preparationTime, slug }) {
       </CardBody>
     </Card>
   );
-}
+};
+
+export default RecipeCard;
