@@ -1,9 +1,9 @@
 import { Container } from 'reactstrap';
 
-import { Footer } from './Footer';
-import { Header } from './Header';
+import Footer from './Footer';
+import Header from './Header';
 
-export function Layout({ children }) {
+const Layout = ({ children }) => {
   return (
     <>
       <Header />
@@ -11,4 +11,6 @@ export function Layout({ children }) {
       <Footer />
     </>
   );
-}
+};
+
+export default Layout;

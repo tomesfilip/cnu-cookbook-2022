@@ -1,6 +1,6 @@
 import { Navbar, Container, NavbarBrand } from 'reactstrap';
 
-export function Header() {
+const Header = () => {
   return (
     <Navbar color="dark" dark>
       <Container>
@@ -8,4 +8,6 @@ export function Header() {
       </Container>
     </Navbar>
   );
-}
+};
+
+export default Header;

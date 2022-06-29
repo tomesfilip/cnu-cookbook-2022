@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { Container, Spinner, Alert } from 'reactstrap';
 
 import { api } from '../api';
-import { SearchInput } from '../components/SearchInput';
-import { RecipesList } from '../components/RecipesList';
+import SearchInput from '../components/SearchInput';
+import RecipesList from '../components/RecipesList';
 
-export function RecipeListPage() {
+const RecipeListPage = () => {
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
@@ -40,4 +40,6 @@ export function RecipeListPage() {
       <RecipesList recipes={filterredRecipes} />
     </Container>
   );
-}
+};
+
+export default RecipeListPage;

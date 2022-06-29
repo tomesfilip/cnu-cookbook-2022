@@ -1,9 +1,9 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { Layout } from './components/Layout';
-import { Routes } from './Routes';
+import Layout from './components/Layout';
+import Routes from './Routes';
 
-export function App() {
+const App = () => {
   return (
     <Router>
       <Layout>
@@ -11,4 +11,6 @@ export function App() {
       </Layout>
     </Router>
   );
-}
+};
+
+export default App;

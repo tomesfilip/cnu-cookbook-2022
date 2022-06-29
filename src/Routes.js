@@ -1,10 +1,10 @@
 import { Routes as RouterRoutes, Route } from 'react-router-dom';
 
-import { RecipeListPage } from './pages/RecipeListPage';
-import { NotFoundPage } from './pages/NotFoundPage';
-import { RecipeDetailPage } from './pages/RecipeDetailPage';
+import RecipeListPage from './pages/RecipeListPage';
+import NotFoundPage from './pages/NotFoundPage';
+import RecipeDetailPage from './pages/RecipeDetailPage';
 
-export function Routes() {
+const Routes = () => {
   return (
     <RouterRoutes>
       <Route index element={<RecipeListPage />} />
@@ -12,4 +12,6 @@ export function Routes() {
       <Route path="*" element={<NotFoundPage />} />
     </RouterRoutes>
   );
-}
+};
+
+export default Routes;

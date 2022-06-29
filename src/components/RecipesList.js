@@ -1,6 +1,6 @@
 import { Row, Col } from 'reactstrap';
 
-import { RecipeCard } from './RecipeCard';
+import RecipeCard from './RecipeCard';
 
 const RecipesList = ({ recipes }) => {
   return (
