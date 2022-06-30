@@ -5,6 +5,7 @@ import Select from 'react-select';
 import SearchInput from '../components/SearchInput';
 import RecipesList from '../components/RecipesList';
 import useFetchRecipes from '../hooks/useFetchRecipes';
+import FloatingButton from '../components/FloatingButton';
 
 const RecipeListPage = () => {
   const { data: recipes, isLoading, error } = useFetchRecipes();
@@ -46,6 +47,7 @@ const RecipeListPage = () => {
   return (
     <Container>
       <h1>Recepty</h1>
+      <FloatingButton linkText={'Pridaj recept'} linkTo="/add-edit-recipe/" />
       <SearchInput onChange={handleSearchInputChange} value={searchValue} />
       <Row className="mb-4">
         <Col xs={3}>
