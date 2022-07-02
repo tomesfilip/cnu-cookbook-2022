@@ -2,6 +2,7 @@ import { Card, CardBody, CardTitle, CardSubtitle, CardImg } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 import placeholder from '../images/food-placeholder.png';
+import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
 
 const RecipeCard = ({ title, preparationTime, slug }) => {
   return (
@@ -10,7 +11,7 @@ const RecipeCard = ({ title, preparationTime, slug }) => {
         <CardImg src={placeholder} alt={title} top />
         <CardBody>
           <CardTitle tag="h5">{title}</CardTitle>
-          <CardSubtitle>{preparationTime} min</CardSubtitle>
+          <CardSubtitle>{getNormalizedPrepTime(preparationTime)}</CardSubtitle>
         </CardBody>
       </Link>
     </Card>

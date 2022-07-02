@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { List, Row } from 'reactstrap';
 import { api } from '../api';
 import PlaceHolder from '../images/food-placeholder.png';
+import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
 import DeleteRecipeButton from './DeleteRecipeButton';
 import EditRecipeButton from './EditRecipeButton';
 
@@ -46,7 +47,7 @@ const RecipeDetailCard = ({
       />
       <DeleteRecipeButton handleDeleteRecipe={handleDeteleRecipe} />
       <Row>
-        <h5>{preparationTime} min</h5>
+        <h5>{getNormalizedPrepTime(preparationTime)}</h5>
       </Row>
       <Row>
         <List className="bg-light p-4 rounded-3" type="unstyled">
