@@ -1,22 +1,50 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { List, Row } from 'reactstrap';
+import { api } from '../api';
 import PlaceHolder from '../images/food-placeholder.png';
+import DeleteRecipeButton from './DeleteRecipeButton';
+import EditRecipeButton from './EditRecipeButton';
 
 const RecipeDetailCard = ({
   title,
   preparationTime,
   ingredients,
   directions,
+  slug,
+  _id,
 }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
+
   const parsedDirections = directions
     ? directions
         .split(/([0-9])\.+ /g)
         .filter((direction) => direction.length > 1)
     : [];
 
+  const handleDeteleRecipe = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await api.delete(`/recipes/${_id}`);
+      console.log(response);
+      setIsDeleting(false);
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="recipe-detail">
       <img src={PlaceHolder} alt={title} />
       <h2 className="my-2">{title}</h2>
+      <EditRecipeButton
+        linkText="Upravit"
+        linkTo={`/add-edit-recipe/${slug}`}
+      />
+      <DeleteRecipeButton handleDeleteRecipe={handleDeteleRecipe} />
       <Row>
         <h5>{preparationTime} min</h5>
       </Row>

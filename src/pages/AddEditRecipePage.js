@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Col,
@@ -11,6 +11,7 @@ import {
   Button,
 } from 'reactstrap';
 import { api } from '../api';
+import useFetchRecipe from '../hooks/useFetchRecipe';
 import { createRecipe } from '../utils/createRecipe';
 
 const AddEditRecipePage = () => {
@@ -20,12 +21,25 @@ const AddEditRecipePage = () => {
   const [preparationTime, setPreparationTime] = useState('');
   const [directions, setDirections] = useState('');
   const [servingCount, setServingCount] = useState('');
-  const [ingredients] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientAmount, setIngredientAmount] = useState('');
   const [ingredientAmountUnit, setIngredientAmountUnit] = useState('');
   const [canSaveIngredient, setCanSaveIngredient] = useState(false);
   const [isUloading, setIsUploading] = useState(false);
+
+  const { data: recipe, isLoading, error } = useFetchRecipe(slug);
+
+  useEffect(() => {
+    if (recipe) {
+      console.log('asdasdasd');
+      setTitle(recipe.title);
+      setPreparationTime(recipe.preparationTime);
+      setDirections(recipe.directions);
+      setServingCount(recipe.servingCount);
+      setIngredients(recipe.ingredients);
+    }
+  }, [recipe]);
 
   useEffect(() => {
     setCanSaveIngredient(
@@ -49,50 +63,88 @@ const AddEditRecipePage = () => {
     setIngredientAmountUnit('');
   };
 
-  const handleSaveRecipe = (e) => {
-    e.preventDefault();
-    setIsUploading(true);
-    const newRecipe = createRecipe(
-      directions,
-      ingredients,
-      title,
-      preparationTime,
-      servingCount,
-    );
+  const handleSaveRecipe = useCallback(
+    (shouldCreateRecipe = false, shouldUpdateRecipe = false) => {
+      return async (e) => {
+        e.preventDefault();
+        setIsUploading(true);
+        const newRecipe = recipe
+          ? createRecipe(
+              directions,
+              ingredients,
+              title,
+              preparationTime,
+              servingCount,
+              recipe._id,
+            )
+          : createRecipe(
+              directions,
+              ingredients,
+              title,
+              preparationTime,
+              servingCount,
+            );
 
-    const addRecipe = async (recipe) => {
-      try {
-        const response = await api.post('/recipes', recipe);
-        setIsUploading(false);
-        console.log(response.status);
-        if (response.status === 201) {
-          navigate('/');
+        const addRecipe = async (recipe) => {
+          try {
+            const response = await api.post('/recipes', recipe);
+            setIsUploading(false);
+            console.log(response.status);
+            if (response.status === 201) {
+              navigate('/');
+            }
+          } catch (err) {
+            console.log(err);
+            setIsUploading(false);
+          }
+        };
+
+        const updateRecipe = async (recipe) => {
+          try {
+            console.log(recipe);
+            const response = await api.post(`/recipes/${recipe._id}`, recipe);
+            setIsUploading(false);
+            console.log(response);
+            if (response.status === 200) {
+              navigate(`/recipe/${slug}`);
+            }
+          } catch (err) {
+            console.log(err);
+            setIsUploading(false);
+          }
+        };
+
+        if (shouldCreateRecipe) {
+          console.log('adding recipe');
+          addRecipe(newRecipe);
+        } else if (shouldUpdateRecipe) {
+          console.log('updating recipe');
+          updateRecipe(newRecipe);
         }
-      } catch (err) {
-        console.log(err);
-        setIsUploading(false);
-      }
-    };
-
-    addRecipe(newRecipe);
-  };
+      };
+    },
+  );
 
   return (
     <Container>
       <Row>
         <Col>
-          <h2>{slug ? 'Editovat recept' : 'Přidat recept'}</h2>
+          <h2>{recipe ? 'Editovat recept' : 'Přidat recept'}</h2>
         </Col>
         <Col>
           <Button
             outline
             color="dark"
-            onClick={handleSaveRecipe}
+            onClick={
+              recipe
+                ? handleSaveRecipe(false, true)
+                : handleSaveRecipe(true, false)
+            }
             disabled={isUloading}
             form="recipeForm"
             type="submit"
           >
-            Uložit recept
+            {recipe ? 'Uložit změny' : 'Uložit recept'}
           </Button>
         </Col>
         <Col>
@@ -179,8 +231,8 @@ const AddEditRecipePage = () => {
           <Row>
             <Col>
               {ingredients.map(({ name, amount, amountUnit, timestamp }) => (
-                <div key={timestamp} className="ingredient">
-                  {name}: {amount} {amountUnit}
+                <div key={name} className="ingredient">
+                  {name}: {amount} {amountUnit} - {timestamp}
                 </div>
               ))}
             </Col>

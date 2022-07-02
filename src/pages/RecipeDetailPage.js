@@ -13,12 +13,16 @@ const RecipeDetailPage = () => {
       {isLoading && <Spinner />}
       {error && <Alert color="danger">{error.toString()}</Alert>}
       {recipe && (
-        <RecipeDetailCard
-          title={recipe.title}
-          preparationTime={recipe.preparationTime}
-          ingredients={recipe.ingredients}
-          directions={recipe.directions}
-        />
+        <div>
+          <RecipeDetailCard
+            title={recipe.title}
+            preparationTime={recipe.preparationTime}
+            ingredients={recipe.ingredients}
+            directions={recipe.directions}
+            slug={slug}
+            _id={recipe._id}
+          />
+        </div>
       )}
     </Container>
   );
