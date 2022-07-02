@@ -8,6 +8,8 @@ const RecipeDetailPage = () => {
   const { slug } = useParams();
   const { data: recipe, isLoading, error } = useFetchRecipe(slug);
 
+  console.log(recipe);
+
   return (
     <Container>
       {isLoading && <Spinner />}

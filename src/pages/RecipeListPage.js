@@ -47,7 +47,7 @@ const RecipeListPage = () => {
   return (
     <Container>
       <h1>Recepty</h1>
-      <FloatingButton linkText={'Pridaj recept'} linkTo="/add-edit-recipe/" />
+      <FloatingButton linkText={'Pridaj recept'} linkTo="/pridat-recept" />
       <SearchInput onChange={handleSearchInputChange} value={searchValue} />
       <Row className="mb-4">
         <Col xs={3}>

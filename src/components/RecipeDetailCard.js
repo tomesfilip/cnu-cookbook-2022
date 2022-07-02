@@ -41,10 +41,7 @@ const RecipeDetailCard = ({
     <div className="recipe-detail">
       <img src={PlaceHolder} alt={title} />
       <h2 className="my-2">{title}</h2>
-      <EditRecipeButton
-        linkText="Upravit"
-        linkTo={`/add-edit-recipe/${slug}`}
-      />
+      <EditRecipeButton linkText="Upravit" linkTo={`/recept/${slug}/upravit`} />
       <DeleteRecipeButton handleDeleteRecipe={handleDeteleRecipe} />
       <Row>
         <h5>{getNormalizedPrepTime(preparationTime)}</h5>
