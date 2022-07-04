@@ -24,7 +24,7 @@ const useFetchRecipe = (slug) => {
 
     getData();
     return () => abortController.abort();
-  }, []);
+  }, [slug]);
 
   return { data, isLoading, error };
 };
