@@ -11,6 +11,7 @@ const RecipesList = ({ recipes }) => {
             title={recipe.title}
             preparationTime={recipe.preparationTime}
             slug={recipe.slug}
+            sideDish={recipe.sideDish}
           />
         </Col>
       ))}

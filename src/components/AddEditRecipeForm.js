@@ -14,6 +14,7 @@ const AddEditRecipeForm = ({ recipe }) => {
   const [servingCount, setServingCount] = useState(
     recipe ? recipe.servingCount : '',
   );
+  const [sideDish, setSideDish] = useState(recipe ? recipe.sideDish : '');
   const [ingredients] = useState(recipe ? recipe.ingredients : []);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientAmount, setIngredientAmount] = useState('');
@@ -47,14 +48,13 @@ const AddEditRecipeForm = ({ recipe }) => {
     e.preventDefault();
     setIsUploading(true);
 
-    console.log('handleUpdate');
-
     const newRecipe = createRecipe(
       directions,
       ingredients,
       title,
       preparationTime,
       servingCount,
+      sideDish,
       recipe._id,
     );
 
@@ -76,14 +76,12 @@ const AddEditRecipeForm = ({ recipe }) => {
       }
     };
 
-    console.log('updating recipe');
     updateRecipe(newRecipe);
   };
 
   const handleSaveRecipe = (e) => {
     e.preventDefault();
     setIsUploading(true);
-    console.log('handle save');
 
     const newRecipe = createRecipe(
       directions,
@@ -91,6 +89,7 @@ const AddEditRecipeForm = ({ recipe }) => {
       title,
       preparationTime,
       servingCount,
+      sideDish,
     );
 
     const addRecipe = async (recipe) => {
@@ -107,7 +106,6 @@ const AddEditRecipeForm = ({ recipe }) => {
       }
     };
 
-    console.log('adding recipe');
     addRecipe(newRecipe);
   };
 
@@ -136,15 +134,29 @@ const AddEditRecipeForm = ({ recipe }) => {
         </Col>
       </Row>
       <FormGroup>
-        <Label for="recipeTitle">Název</Label>
-        <Input
-          type="text"
-          name="recipeTitle"
-          placeholder=""
-          required
-          onChange={({ target }) => setTitle(target.value)}
-          value={title}
-        />
+        <Row>
+          <Col>
+            <Label for="recipeTitle">Název</Label>
+            <Input
+              type="text"
+              name="recipeTitle"
+              placeholder=""
+              required
+              onChange={({ target }) => setTitle(target.value)}
+              value={title}
+            />
+          </Col>
+          <Col>
+            <Label for="recipeTitle">Příloha</Label>
+            <Input
+              type="text"
+              name="recipeSideDish"
+              placeholder=""
+              onChange={({ target }) => setSideDish(target.value)}
+              value={sideDish}
+            />
+          </Col>
+        </Row>
       </FormGroup>
       <FormGroup>
         <Row>
