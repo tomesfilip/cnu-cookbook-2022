@@ -1,7 +1,7 @@
-import { Alert } from 'bootstrap';
 import { useParams } from 'react-router-dom';
-import { Container, Spinner } from 'reactstrap';
+import { ClipLoader } from 'react-spinners';
 import AddEditRecipeForm from '../components/AddEditRecipeForm';
+import Alert from '../components/Alert';
 import useFetchRecipe from '../hooks/useFetchRecipe';
 
 const EditRecipePage = () => {
@@ -9,11 +9,11 @@ const EditRecipePage = () => {
   const { data: recipe, isLoading, error } = useFetchRecipe(slug);
 
   return (
-    <Container>
-      {isLoading && <Spinner />}
-      {error && <Alert color="danger">{error.toString()}</Alert>}
+    <div className="container mx-auto px-4 md:px-0">
+      {isLoading && <ClipLoader />}
+      {error && <Alert text={error.toString()} />}
       {recipe && <AddEditRecipeForm recipe={recipe} />}
-    </Container>
+    </div>
   );
 };
 export default EditRecipePage;

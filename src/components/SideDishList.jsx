@@ -1,14 +1,12 @@
-import { Container, List, Row } from 'reactstrap';
-
 const SideDishList = ({ sideDishList }) => {
   return (
-    <Container>
-      <List className="bg-light p-4 rounded-3" type="unstyled">
+    <div className="container mx-auto px-4 md:px-0">
+      <ul className="bg-slate-100 p-4 rounded-lg" type="unstyled">
         {sideDishList.map((sideDish) => (
           <li key={sideDish}>{sideDish}</li>
         ))}
-      </List>
-    </Container>
+      </ul>
+    </div>
   );
 };
 export default SideDishList;

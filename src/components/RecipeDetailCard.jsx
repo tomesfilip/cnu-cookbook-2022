@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { List, Row } from 'reactstrap';
 import { api } from '../api';
 import PlaceHolder from '../images/food-placeholder.png';
 import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
@@ -43,27 +42,21 @@ const RecipeDetailCard = ({
       <h2 className="my-2">{title}</h2>
       <EditRecipeButton linkText="Upravit" linkTo={`/recept/${slug}/upravit`} />
       <DeleteRecipeButton handleDeleteRecipe={handleDeteleRecipe} />
-      <Row>
-        <h5>{getNormalizedPrepTime(preparationTime)}</h5>
-      </Row>
-      <Row>
-        <List className="bg-light p-4 rounded-3" type="unstyled">
-          {ingredients.map(({ _id, amount, amountUnit, name }) => (
-            <li key={_id}>
-              {amount} {amountUnit} - {name}
-            </li>
-          ))}
-        </List>
-      </Row>
-      <Row>
-        <ol className="p-4">
-          {parsedDirections.map((direction) => (
-            <li className="mb-3" key={direction}>
-              {direction}
-            </li>
-          ))}
-        </ol>
-      </Row>
+      <h5>{getNormalizedPrepTime(preparationTime)}</h5>
+      <ul className="bg-slate-100 p-4 rounded-lg">
+        {ingredients.map(({ _id, amount, amountUnit, name }) => (
+          <li key={_id}>
+            {amount} {amountUnit} - {name}
+          </li>
+        ))}
+      </ul>
+      <ol className="p-4">
+        {parsedDirections.map((direction) => (
+          <li className="mb-3" key={direction}>
+            {direction}
+          </li>
+        ))}
+      </ol>
     </div>
   );
 };

@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Container, Spinner, Alert, Col, Row } from 'reactstrap';
 import Select from 'react-select';
 
 import SearchInput from '../components/SearchInput';
 import RecipesList from '../components/RecipesList';
 import useFetchRecipes from '../hooks/useFetchRecipes';
 import FloatingButton from '../components/FloatingButton';
+import Alert from '../components/Alert';
+import { ClipLoader } from 'react-spinners';
 
 const RecipeListPage = () => {
   const { data: recipes, isLoading, error } = useFetchRecipes();
@@ -45,14 +46,15 @@ const RecipeListPage = () => {
   const handleSortChange = ({ value }) => setSortByOption(value);
 
   return (
-    <Container>
-      <h1>Recepty</h1>
-      <FloatingButton linkText={'Pridaj recept'} linkTo="/pridat-recept" />
-      <SearchInput onChange={handleSearchInputChange} value={searchValue} />
-      <Row className="mb-4">
-        <Col xs={3}>
-          <label htmlFor="prepTimeInput" className="form-label">
-            Maximální čas přípravy: {maxPrepTime} min
+    <div className="container mx-auto px-4 md:px-0">
+      <h1 className="text-4xl text-stone-700">Recepty</h1>
+      <FloatingButton linkText="Pridaj recept" linkTo="/pridat-recept" />
+      <div className="w-full flex flex-wrap md:items-center flex-col md:flex-row">
+        <SearchInput onChange={handleSearchInputChange} value={searchValue} />
+        <div className="preparation-time-range-filter md:mx-12">
+          <label htmlFor="prepTimeInput" className="form-label block">
+            Maximální čas přípravy (min):
+            <span className="inline-block ml-1 w-10"> {maxPrepTime}</span>
           </label>
           <input
             type="range"
@@ -64,21 +66,20 @@ const RecipeListPage = () => {
             value={maxPrepTime}
             onChange={handleMaxPrepTimeChange}
           ></input>
-        </Col>
-        <Col xs={4}>
+        </div>
+        <div className="sort-options">
           Seřadit podle
           <Select options={sortOptions} onChange={handleSortChange} />
-        </Col>
-      </Row>
-
-      {isLoading && <Spinner />}
-      {error && <Alert color="danger">{error.toString()}</Alert>}
+        </div>
+      </div>
+      {isLoading && <ClipLoader />}
+      {error && <Alert text={error.toString()} />}
       {sortedRecipes.length < 1 ? (
         <h2>K zvoleným filtrom nebyly nalezeny žádné recepty</h2>
       ) : (
         <RecipesList recipes={sortedRecipes} />
       )}
-    </Container>
+    </div>
   );
 };
 

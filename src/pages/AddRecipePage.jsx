@@ -1,11 +1,10 @@
-import { Container } from 'reactstrap';
 import AddEditRecipeForm from '../components/AddEditRecipeForm';
 
 const AddRecipePage = () => {
   return (
-    <Container>
+    <div className="container mx-auto px-4 md:px-0">
       <AddEditRecipeForm />
-    </Container>
+    </div>
   );
 };
 export default AddRecipePage;

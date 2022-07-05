@@ -1,6 +1,5 @@
 import { api } from '../api';
-
-const { useState, useEffect } = require('react');
+import { useState, useEffect } from 'react';
 
 const useFetchSideDishList = () => {
   const [data, setData] = useState(null);

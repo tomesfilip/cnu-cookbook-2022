@@ -1,5 +1,3 @@
-import { Container } from 'reactstrap';
-
 import Footer from './Footer';
 import Header from './Header';
 
@@ -7,7 +5,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <Header />
-      <Container className="mt-4">{children}</Container>
+      <div className="lg:px-12 mt-4">{children}</div>
       <Footer />
     </>
   );
