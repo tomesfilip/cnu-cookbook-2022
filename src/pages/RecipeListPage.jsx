@@ -4,7 +4,7 @@ import Select from 'react-select';
 import SearchInput from '../components/SearchInput';
 import RecipesList from '../components/RecipesList';
 import useFetchRecipes from '../hooks/useFetchRecipes';
-import FloatingButton from '../components/FloatingButton';
+import FloatingButton from '../components/atoms/FloatingButton';
 import Alert from '../components/Alert';
 import { ClipLoader } from 'react-spinners';
 

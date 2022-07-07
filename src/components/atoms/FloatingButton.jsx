@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import '../scss/FloatingButton.scss';
+import '../../scss/FloatingButton.scss';
 
 const FloatingButton = ({ linkText, linkTo }) => {
   return (

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import { createRecipe } from '../utils/createRecipe';
-import ActionButton from './ActionButton';
+import OutlineSmButton from './atoms/OutlineSmButton';
 
 const AddEditRecipeForm = ({ recipe }) => {
   const navigate = useNavigate();
@@ -122,7 +122,7 @@ const AddEditRecipeForm = ({ recipe }) => {
         >
           Uložit recept
         </button>
-        <ActionButton btnText="Zpátky" handleAction={() => navigate(-1)} />
+        <OutlineSmButton btnText="Zpátky" onClick={() => navigate(-1)} />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4">
         <div className="form-group">
@@ -209,13 +209,11 @@ const AddEditRecipeForm = ({ recipe }) => {
             onChange={({ target }) => setIngredientAmountUnit(target.value)}
             value={ingredientAmountUnit}
           />
-          <button
-            className="border-2 border-slate-700 px-4 py-1 text-slate-700 hover:text-white rounded hover:rounded-xl hover:bg-slate-600 transition-all duration-300 ease-in-out"
+          <OutlineSmButton
+            btnText="Přidat"
             disabled={!canSaveIngredient}
             onClick={handleSaveIngredient}
-          >
-            Přidat
-          </button>
+          />
         </div>
         <div className="added-ingredients px-4 my-2">
           {ingredients.map(({ name, amount, amountUnit, timestamp }) => (
