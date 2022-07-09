@@ -16,7 +16,9 @@ const AddEditRecipeForm = ({ recipe }) => {
     recipe ? recipe.servingCount : '',
   );
   const [sideDish, setSideDish] = useState(recipe ? recipe.sideDish : '');
-  const [ingredients] = useState(recipe ? recipe.ingredients : []);
+  const [ingredients, setIngredients] = useState(
+    recipe ? recipe.ingredients : [],
+  );
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientAmount, setIngredientAmount] = useState('');
   const [ingredientAmountUnit, setIngredientAmountUnit] = useState('');
@@ -32,11 +34,12 @@ const AddEditRecipeForm = ({ recipe }) => {
   }, [ingredientName, ingredientAmount, ingredientAmountUnit]);
 
   const handleRemoveIngredient = (timestamp) => {
-    ingredients.filter((ingredient) => ingredient.timestamp === timestamp);
+    setIngredients(
+      ingredients.filter((ingredient) => ingredient.timestamp !== timestamp),
+    );
   };
 
-  const handleSaveIngredient = (e) => {
-    e.preventDefault();
+  const handleSaveIngredient = () => {
     ingredients.push({
       amount: ingredientAmount,
       amountUnit: ingredientAmountUnit,
@@ -213,12 +216,23 @@ const AddEditRecipeForm = ({ recipe }) => {
             onClick={handleSaveIngredient}
           />
         </div>
-        <div className="added-ingredients px-4 my-2">
-          {ingredients.map(({ name, amount, amountUnit, timestamp }) => (
-            <div key={timestamp ? timestamp : name} className="ingredient">
-              {name}: {amount} {amountUnit}
-            </div>
-          ))}
+        <div className="added-ingredients px-4 my-6">
+          <ul>
+            {ingredients.map(({ name, amount, amountUnit, timestamp }) => (
+              <div
+                key={timestamp ? timestamp : name}
+                className="ingredient flex items-center justify-between w-4/5 md:w-3/5 mb-2"
+              >
+                <p>
+                  {name}: {amount} {amountUnit}
+                </p>
+                <OutlineSmButton
+                  btnText="Zmazat"
+                  onClick={() => handleRemoveIngredient(timestamp)}
+                />
+              </div>
+            ))}
+          </ul>
         </div>
       </div>
       <div className="form-group mb-6">
