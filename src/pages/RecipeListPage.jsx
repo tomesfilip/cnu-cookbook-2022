@@ -7,6 +7,7 @@ import useFetchRecipes from '../hooks/useFetchRecipes';
 import FloatingButton from '../components/atoms/FloatingButton';
 import Alert from '../components/Alert';
 import { ClipLoader } from 'react-spinners';
+import PreparationTimeRangeFilter from '../components/PreparationTimeRangeFilter';
 
 const RecipeListPage = () => {
   const { data: recipes, isLoading, error } = useFetchRecipes();
@@ -51,25 +52,17 @@ const RecipeListPage = () => {
       <FloatingButton linkText="Pridaj recept" linkTo="/pridat-recept" />
       <div className="w-full flex flex-wrap md:items-center flex-col md:flex-row">
         <SearchInput onChange={handleSearchInputChange} value={searchValue} />
-        <div className="preparation-time-range-filter md:mx-12">
-          <label htmlFor="prepTimeInput" className="form-label block">
-            Maximální čas přípravy (min):
-            <span className="inline-block ml-1 w-10"> {maxPrepTime}</span>
-          </label>
-          <input
-            type="range"
-            className="form-range"
-            min="0"
-            max="1000"
-            step="5"
-            id="prepTimeInput"
-            value={maxPrepTime}
-            onChange={handleMaxPrepTimeChange}
-          ></input>
-        </div>
+        <PreparationTimeRangeFilter
+          maxPrepTime={maxPrepTime}
+          handleMaxPrepTimeChange={handleMaxPrepTimeChange}
+        />
         <div className="sort-options">
           Seřadit podle
-          <Select options={sortOptions} onChange={handleSortChange} />
+          <Select
+            defaultValue={sortOptions[0]}
+            options={sortOptions}
+            onChange={handleSortChange}
+          />
         </div>
       </div>
       {isLoading && <ClipLoader />}

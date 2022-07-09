@@ -9,8 +9,6 @@ const RecipeDetailPage = () => {
   const { slug } = useParams();
   const { data: recipe, isLoading, error } = useFetchRecipe(slug);
 
-  console.log(recipe);
-
   return (
     <div className="container mx-auto px-4 md:px-0">
       {isLoading && <ClipLoader />}
