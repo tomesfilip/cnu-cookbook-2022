@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import PlaceHolder from '../images/food-placeholder.png';
-import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
 import OutlineSmButton from './atoms/OutlineSmButton';
 import ConfirmDialog from './ConfirmDialog';
 import Timebox from './Timebox';

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import { createRecipe } from '../utils/createRecipe';
+import Input from './atoms/Input';
 import OutlineSmButton from './atoms/OutlineSmButton';
 
 const AddEditRecipeForm = ({ recipe }) => {
@@ -30,7 +31,12 @@ const AddEditRecipeForm = ({ recipe }) => {
     );
   }, [ingredientName, ingredientAmount, ingredientAmountUnit]);
 
-  const handleSaveIngredient = () => {
+  const handleRemoveIngredient = (timestamp) => {
+    ingredients.filter((ingredient) => ingredient.timestamp === timestamp);
+  };
+
+  const handleSaveIngredient = (e) => {
+    e.preventDefault();
     ingredients.push({
       amount: ingredientAmount,
       amountUnit: ingredientAmountUnit,
@@ -126,11 +132,10 @@ const AddEditRecipeForm = ({ recipe }) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4">
         <div className="form-group">
-          <label className="block mb-1" for="recipeTitle">
+          <label className="block mb-1" htmlFor="recipeTitle">
             Název
           </label>
-          <input
-            className="border-2 rounded-lg px-2 py-1"
+          <Input
             type="text"
             name="recipeTitle"
             placeholder=""
@@ -140,11 +145,10 @@ const AddEditRecipeForm = ({ recipe }) => {
           />
         </div>
         <div className="form-group">
-          <label className="block mb-1" for="recipeTitle">
+          <label className="block mb-1" htmlFor="recipeTitle">
             Příloha
           </label>
-          <input
-            className="border-2 rounded-lg px-2 py-1"
+          <Input
             type="text"
             name="recipeSideDish"
             placeholder=""
@@ -153,11 +157,10 @@ const AddEditRecipeForm = ({ recipe }) => {
           />
         </div>
         <div className="form-group">
-          <label className="block mb-1" for="preparationTime">
+          <label className="block mb-1" htmlFor="preparationTime">
             Doba přípravy (min)
           </label>
-          <input
-            className="border-2 rounded-lg px-2 py-1"
+          <Input
             type="number"
             name="preparationTime"
             placeholder=""
@@ -166,11 +169,10 @@ const AddEditRecipeForm = ({ recipe }) => {
           />
         </div>
         <div className="form-group">
-          <label className="block mb-1" for="preparationTime">
+          <label className="block mb-1" htmlFor="preparationTime">
             Počet porcí
           </label>
-          <input
-            className="border-2 rounded-lg px-2 py-1"
+          <Input
             type="number"
             name="preparationTime"
             placeholder=""
@@ -180,30 +182,26 @@ const AddEditRecipeForm = ({ recipe }) => {
         </div>
       </div>
       <div className="form-group ingredients my-4">
-        <label className="block mb-1" for="ingredients">
+        <label className="block mb-1" htmlFor="ingredients">
           Ingredience
         </label>
         <div className="options flex flex-wrap gap-x-8 gap-y-4">
-          <input
-            className="border-2 rounded-lg px-2 py-1"
+          <Input
             type="text"
             name="ingredientName"
             placeholder="název"
             onChange={({ target }) => setIngredientName(target.value)}
             value={ingredientName}
           />
-          <input
+          <Input
             type="number"
-            className="border-2 rounded-lg px-2 py-1"
             name="ingredientAmount"
             placeholder="množství"
             onChange={({ target }) => setIngredientAmount(target.value)}
             value={ingredientAmount}
           />
-
-          <input
+          <Input
             type="text"
-            className="border-2 rounded-lg px-2 py-1"
             name="ingredientUnit"
             placeholder="jednotka"
             onChange={({ target }) => setIngredientAmountUnit(target.value)}
@@ -224,7 +222,7 @@ const AddEditRecipeForm = ({ recipe }) => {
         </div>
       </div>
       <div className="form-group mb-6">
-        <label className="block my-1" for="directions">
+        <label className="block my-1" htmlFor="directions">
           Postup přípravy
         </label>
         <textarea
