@@ -131,7 +131,7 @@ const AddEditRecipeForm = ({ recipe }) => {
         >
           Uložit recept
         </button>
-        <OutlineSmButton btnText="Zpátky" onClick={() => navigate(-1)} />
+        <OutlineSmButton onClick={() => navigate(-1)}>Zpátky</OutlineSmButton>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4">
         <div className="form-group">
@@ -211,10 +211,11 @@ const AddEditRecipeForm = ({ recipe }) => {
             value={ingredientAmountUnit}
           />
           <OutlineSmButton
-            btnText="Přidat"
             disabled={!canSaveIngredient}
             onClick={handleSaveIngredient}
-          />
+          >
+            Přidat
+          </OutlineSmButton>
         </div>
         <div className="added-ingredients px-4 my-6">
           <ul>
@@ -227,9 +228,10 @@ const AddEditRecipeForm = ({ recipe }) => {
                   {name}: {amount} {amountUnit}
                 </p>
                 <OutlineSmButton
-                  btnText="Zmazat"
                   onClick={() => handleRemoveIngredient(timestamp)}
-                />
+                >
+                  Zmazat
+                </OutlineSmButton>
               </div>
             ))}
           </ul>

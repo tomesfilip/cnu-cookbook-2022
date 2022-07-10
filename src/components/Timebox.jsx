@@ -1,4 +1,4 @@
-import timer from '../images/timer.svg';
+import timer from '../assets/img/timer.svg';
 import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
 
 const Timebox = ({ preparationTime }) => {

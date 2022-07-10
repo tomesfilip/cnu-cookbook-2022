@@ -8,6 +8,8 @@ import FloatingButton from '../components/atoms/FloatingButton';
 import Alert from '../components/Alert';
 import { ClipLoader } from 'react-spinners';
 import PreparationTimeRangeFilter from '../components/PreparationTimeRangeFilter';
+import plusImg from '../assets/img/add.svg';
+import { MdOutlineAdd } from 'react-icons/md';
 
 const RecipeListPage = () => {
   const { data: recipes, isLoading, error } = useFetchRecipes();
@@ -46,10 +48,28 @@ const RecipeListPage = () => {
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
   const handleSortChange = ({ value }) => setSortByOption(value);
 
+  const recipeTheme = (theme) => {
+    return {
+      ...theme,
+      colors: {
+        ...theme.colors,
+        primary25: 'orange',
+        primary: '#44403c',
+      },
+    };
+  };
+
   return (
     <div className="container mx-auto px-4 md:px-0">
       <h1 className="text-4xl text-stone-700">Recepty</h1>
-      <FloatingButton linkText="Pridaj recept" linkTo="/pridat-recept" />
+      <FloatingButton
+        linkText="Pridaj recept"
+        linkTo="/pridat-recept"
+        imgSrc={plusImg}
+        imgAlt="znak plus"
+      >
+        <MdOutlineAdd size="2em" />
+      </FloatingButton>
       <div className="w-full flex flex-wrap md:items-center flex-col md:flex-row">
         <SearchInput onChange={handleSearchInputChange} value={searchValue} />
         <PreparationTimeRangeFilter
@@ -62,6 +82,7 @@ const RecipeListPage = () => {
             defaultValue={sortOptions[0]}
             options={sortOptions}
             onChange={handleSortChange}
+            theme={recipeTheme}
           />
         </div>
       </div>

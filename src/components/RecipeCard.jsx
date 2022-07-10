@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import placeholder from '../images/food-placeholder.png';
+import placeholder from '../assets/img/food-placeholder.png';
 import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
 
 const RecipeCard = ({ title, preparationTime, slug, sideDish }) => {

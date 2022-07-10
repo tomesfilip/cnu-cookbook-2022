@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { MdDeleteOutline, MdModeEditOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
-import PlaceHolder from '../images/food-placeholder.png';
+import PlaceHolder from '../assets/img/food-placeholder.png';
 import OutlineSmButton from './atoms/OutlineSmButton';
 import ConfirmDialog from './ConfirmDialog';
 import Timebox from './Timebox';
@@ -49,14 +50,12 @@ const RecipeDetailCard = ({
       <img src={PlaceHolder} alt={title} />
       <h2 className="my-2 text-2xl font-medium">{title}</h2>
       <div className="action-buttons flex gap-x-4 mb-4">
-        <OutlineSmButton
-          btnText="Upravit"
-          onClick={() => navigate(`/recept/${slug}/upravit`)}
-        />
-        <OutlineSmButton
-          btnText="Zmazat"
-          onClick={() => setIsDialogVisible(true)}
-        />
+        <OutlineSmButton onClick={() => navigate(`/recept/${slug}/upravit`)}>
+          <MdModeEditOutline size="1.5em" />
+        </OutlineSmButton>
+        <OutlineSmButton onClick={() => setIsDialogVisible(true)}>
+          <MdDeleteOutline size="1.5em" />
+        </OutlineSmButton>
       </div>
       <Timebox preparationTime={preparationTime} />
       {ingredients.length > 0 && (
