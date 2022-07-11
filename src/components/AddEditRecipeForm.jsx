@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { MdDeleteOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
+import useFetchIngredientList from '../hooks/useFetchIngredientList';
 import { createRecipe } from '../utils/createRecipe';
 import Input from './atoms/Input';
 import OutlineSmButton from './atoms/OutlineSmButton';
@@ -23,7 +25,14 @@ const AddEditRecipeForm = ({ recipe }) => {
   const [ingredientAmount, setIngredientAmount] = useState('');
   const [ingredientAmountUnit, setIngredientAmountUnit] = useState('');
   const [canSaveIngredient, setCanSaveIngredient] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+
+  const {
+    data: availableIngredients,
+    error,
+    loading,
+  } = useFetchIngredientList();
 
   useEffect(() => {
     setCanSaveIngredient(
@@ -33,10 +42,15 @@ const AddEditRecipeForm = ({ recipe }) => {
     );
   }, [ingredientName, ingredientAmount, ingredientAmountUnit]);
 
-  const handleRemoveIngredient = (timestamp) => {
-    setIngredients(
-      ingredients.filter((ingredient) => ingredient.timestamp !== timestamp),
-    );
+  const handleRemoveIngredient = (timestamp, id) => {
+    if (timestamp) {
+      setIngredients(
+        ingredients.filter((ingredient) => ingredient.timestamp !== timestamp),
+      );
+    }
+    if (id) {
+      setIngredients(ingredients.filter((ingredient) => ingredient._id !== id));
+    }
   };
 
   const handleSaveIngredient = () => {
@@ -64,20 +78,17 @@ const AddEditRecipeForm = ({ recipe }) => {
       preparationTime,
       servingCount,
       sideDish,
-      recipe._id,
     );
 
     const updateRecipe = async (updatedRecipe) => {
       try {
-        console.log(updatedRecipe);
         const response = await api.post(
-          `/recipes/${updatedRecipe._id}`,
+          `/recipes/${recipe._id}`,
           updatedRecipe,
         );
         setIsUploading(false);
-        console.log(response);
         if (response.status === 200) {
-          navigate(-1);
+          navigate(`/recept/${updatedRecipe.slug}`);
         }
       } catch (err) {
         console.log(err);
@@ -105,7 +116,6 @@ const AddEditRecipeForm = ({ recipe }) => {
       try {
         const response = await api.post('/recipes', recipe);
         setIsUploading(false);
-        console.log(response.status);
         if (response.status === 201) {
           navigate('/');
         }
@@ -219,18 +229,18 @@ const AddEditRecipeForm = ({ recipe }) => {
         </div>
         <div className="added-ingredients px-4 my-6">
           <ul>
-            {ingredients.map(({ name, amount, amountUnit, timestamp }) => (
+            {ingredients.map(({ _id, name, amount, amountUnit, timestamp }) => (
               <div
-                key={timestamp ? timestamp : name}
+                key={timestamp ? timestamp : _id}
                 className="ingredient flex items-center justify-between w-4/5 md:w-3/5 mb-2"
               >
                 <p>
                   {name}: {amount} {amountUnit}
                 </p>
                 <OutlineSmButton
-                  onClick={() => handleRemoveIngredient(timestamp)}
+                  onClick={() => handleRemoveIngredient(timestamp, _id)}
                 >
-                  Zmazat
+                  <MdDeleteOutline size="1.5em" />
                 </OutlineSmButton>
               </div>
             ))}

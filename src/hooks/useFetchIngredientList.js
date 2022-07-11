@@ -1,8 +1,9 @@
 import { api } from '../api';
 import { useState, useEffect } from 'react';
 
-const useFetchRecipe = (slug) => {
+const useFetchIngredientList = () => {
   const [data, setData] = useState(null);
+  const [ingredients] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -11,8 +12,10 @@ const useFetchRecipe = (slug) => {
 
     const getData = async () => {
       try {
-        console.log('use fetch recipe triggered');
-        const { data } = await api.get(`/recipes/${slug}`);
+        const { data } = await api.get('recipes/ingredients');
+        data.map((ingredient) => {
+          return ingredients.push({ value: ingredient, label: ingredient });
+        });
         setData(data);
         setError(null);
       } catch (err) {
@@ -24,9 +27,9 @@ const useFetchRecipe = (slug) => {
 
     getData();
     return () => abortController.abort();
-  }, [slug]);
+  }, [ingredients]);
 
   return { data, isLoading, error };
 };
 
-export default useFetchRecipe;
+export default useFetchIngredientList;

@@ -29,7 +29,6 @@ const RecipeDetailCard = ({
     setIsDeleting(true);
     try {
       const response = await api.delete(`/recipes/${_id}`);
-      console.log(response);
       setIsDeleting(false);
       navigate('/');
     } catch (err) {

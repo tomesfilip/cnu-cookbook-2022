@@ -7,7 +7,6 @@ export const createRecipe = (
   preparationTime,
   servingCount,
   sideDish,
-  _id = null,
 ) => {
   return {
     directions,
@@ -18,6 +17,5 @@ export const createRecipe = (
     servingCount,
     slug: getSlug(title),
     sideDish,
-    _id,
   };
 };
