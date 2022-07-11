@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import useFetchIngredientList from '../hooks/useFetchIngredientList';
 import { createRecipe } from '../utils/createRecipe';
+import { normalizeText } from '../utils/normalizeText';
 import Input from './atoms/Input';
 import OutlineSmButton from './atoms/OutlineSmButton';
 
@@ -128,6 +129,11 @@ const AddEditRecipeForm = ({ recipe }) => {
     addRecipe(newRecipe);
   };
 
+  const handleSugggestionClick = (suggestion) => {
+    setIngredientName(suggestion);
+    setShowSuggestions(false);
+  };
+
   return (
     <form id="recipeForm">
       <h2 className="text-xl">{recipe ? 'Upravit' : 'Přidat'} recept</h2>
@@ -199,13 +205,37 @@ const AddEditRecipeForm = ({ recipe }) => {
           Ingredience
         </label>
         <div className="options flex flex-wrap gap-x-8 gap-y-4">
-          <Input
-            type="text"
-            name="ingredientName"
-            placeholder="název"
-            onChange={({ target }) => setIngredientName(target.value)}
-            value={ingredientName}
-          />
+          <div className="autocomplete relative w-48">
+            <Input
+              type="text"
+              name="ingredientName"
+              placeholder="název"
+              autoComplete="off"
+              onChange={({ target }) => setIngredientName(target.value)}
+              value={ingredientName}
+              onFocus={() => setShowSuggestions(true)}
+            />
+            {showSuggestions && ingredientName && (
+              <ul className="absolute z-10 bg-slate-400 w-full p-2 rounded-lg mt-1">
+                {availableIngredients
+                  .filter((availableIngredient) =>
+                    normalizeText(availableIngredient).includes(
+                      normalizeText(ingredientName),
+                    ),
+                  )
+                  .slice(0, 5)
+                  .map((suggestion) => (
+                    <li
+                      key={suggestion}
+                      className="rounded-lg px-2 hover:bg-slate-200 cursor-pointer"
+                      onClick={() => handleSugggestionClick(suggestion)}
+                    >
+                      {suggestion}
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
           <Input
             type="number"
             name="ingredientAmount"

@@ -10,6 +10,7 @@ import { ClipLoader } from 'react-spinners';
 import PreparationTimeRangeFilter from '../components/PreparationTimeRangeFilter';
 import plusImg from '../assets/img/add.svg';
 import { MdOutlineAdd } from 'react-icons/md';
+import { normalizeText } from '../utils/normalizeText';
 
 const RecipeListPage = () => {
   const { data: recipes, isLoading, error } = useFetchRecipes();
@@ -25,16 +26,8 @@ const RecipeListPage = () => {
   const filteredRecipes = recipes
     ? recipes.filter(({ title, preparationTime }) => {
         return (
-          title
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .includes(
-              searchValue
-                .toLowerCase()
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, ''),
-            ) && preparationTime <= maxPrepTime
+          normalizeText(title).includes(normalizeText(searchValue)) &&
+          preparationTime <= maxPrepTime
         );
       })
     : [];
