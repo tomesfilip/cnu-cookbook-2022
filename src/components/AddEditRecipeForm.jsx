@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
@@ -7,6 +7,7 @@ import { createRecipe } from '../utils/createRecipe';
 import { normalizeText } from '../utils/normalizeText';
 import Input from './atoms/Input';
 import OutlineSmButton from './atoms/OutlineSmButton';
+import Autocomplete from './Autocomplete';
 
 const AddEditRecipeForm = ({ recipe }) => {
   const navigate = useNavigate();
@@ -29,11 +30,7 @@ const AddEditRecipeForm = ({ recipe }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const {
-    data: availableIngredients,
-    error,
-    loading,
-  } = useFetchIngredientList();
+  const { data: availableIngredients } = useFetchIngredientList();
 
   useEffect(() => {
     setCanSaveIngredient(
@@ -130,9 +127,16 @@ const AddEditRecipeForm = ({ recipe }) => {
   };
 
   const handleSugggestionClick = (suggestion) => {
+    console.log(`SUGGESTION CLICK: ${suggestion}`);
     setIngredientName(suggestion);
     setShowSuggestions(false);
   };
+
+  const ingredientSuggestions = availableIngredients
+    ? availableIngredients.filter((ingredient) =>
+        normalizeText(ingredient).includes(normalizeText(ingredientName)),
+      )
+    : [];
 
   return (
     <form id="recipeForm">
@@ -216,24 +220,11 @@ const AddEditRecipeForm = ({ recipe }) => {
               onFocus={() => setShowSuggestions(true)}
             />
             {showSuggestions && ingredientName && (
-              <ul className="absolute z-10 bg-slate-400 w-full p-2 rounded-lg mt-1">
-                {availableIngredients
-                  .filter((availableIngredient) =>
-                    normalizeText(availableIngredient).includes(
-                      normalizeText(ingredientName),
-                    ),
-                  )
-                  .slice(0, 5)
-                  .map((suggestion) => (
-                    <li
-                      key={suggestion}
-                      className="rounded-lg px-2 hover:bg-slate-200 cursor-pointer"
-                      onClick={() => handleSugggestionClick(suggestion)}
-                    >
-                      {suggestion}
-                    </li>
-                  ))}
-              </ul>
+              <Autocomplete
+                suggestionList={ingredientSuggestions}
+                handleSugggestionClick={handleSugggestionClick}
+                noSuggestionText="Neznámá ingredience"
+              />
             )}
           </div>
           <Input
