@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Select from 'react-select';
+import { motion } from 'framer-motion';
 
 import SearchInput from '../components/SearchInput';
 import RecipesList from '../components/RecipesList';
@@ -11,6 +12,7 @@ import PreparationTimeRangeFilter from '../components/PreparationTimeRangeFilter
 import plusImg from '../assets/img/add.svg';
 import { MdOutlineAdd } from 'react-icons/md';
 import { normalizeText } from '../utils/normalizeText';
+import { containerVariants } from '../framerVariants/containerVariants';
 
 const RecipeListPage = () => {
   const { data: recipes, isLoading, error } = useFetchRecipes();
@@ -53,7 +55,13 @@ const RecipeListPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 md:px-0">
+    <motion.div
+      className="container mx-auto px-4 md:px-0"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
       <h1 className="text-4xl text-stone-700">Recepty</h1>
       <FloatingButton
         linkText="Pridaj recept"
@@ -86,7 +94,7 @@ const RecipeListPage = () => {
       ) : (
         <RecipesList recipes={sortedRecipes} />
       )}
-    </div>
+    </motion.div>
   );
 };
 

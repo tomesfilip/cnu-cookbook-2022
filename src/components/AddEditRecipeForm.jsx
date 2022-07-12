@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
@@ -127,7 +127,6 @@ const AddEditRecipeForm = ({ recipe }) => {
   };
 
   const handleSugggestionClick = (suggestion) => {
-    console.log(`SUGGESTION CLICK: ${suggestion}`);
     setIngredientName(suggestion);
     setShowSuggestions(false);
   };
