@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom';
 
-import placeholder from '../assets/img/food-placeholder.png';
+import Placeholder from '../assets/img/food-placeholder.png';
 import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
 
-const RecipeCard = ({ title, preparationTime, slug, sideDish }) => {
+const RecipeCard = ({ title, preparationTime, slug, sideDish, imageURI }) => {
   return (
     <div className="recipe-card px-4 py-2 mx-2 rounded-lg hover:rounded-xl hover:shadow-md transition-all">
       <Link to={`/recept/${slug}`} className="text-reset text-decoration-none">
-        <img src={placeholder} alt={title} />
+        <img
+          className="object-cover rounded-lg w-full h-64"
+          src={imageURI ? imageURI : Placeholder}
+          alt={title}
+        />
         <div className="recipe-card-body mt-2 px-3">
           <h5 className="text-lg">{title}</h5>
           <div className="text-sm flex flex-wrap">

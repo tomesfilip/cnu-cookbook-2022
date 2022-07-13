@@ -10,6 +10,7 @@ const RecipesList = ({ recipes }) => {
           preparationTime={recipe.preparationTime}
           slug={recipe.slug}
           sideDish={recipe.sideDish}
+          imageURI=""
         />
       ))}
     </div>

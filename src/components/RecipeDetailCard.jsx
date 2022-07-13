@@ -14,6 +14,7 @@ const RecipeDetailCard = ({
   directions,
   slug,
   _id,
+  imageURI,
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -46,7 +47,11 @@ const RecipeDetailCard = ({
           dialogText={`Opravdu chceš zmazat recept ${title}`}
         />
       )}
-      <img src={PlaceHolder} alt={title} />
+      <img
+        className="object-cover rounded-lg h-80 sm:h-96 w-96"
+        src={imageURI ? imageURI : PlaceHolder}
+        alt={title}
+      />
       <h2 className="my-2 text-2xl font-medium">{title}</h2>
       <div className="action-buttons flex gap-x-4 mb-4">
         <OutlineSmButton onClick={() => navigate(`/recept/${slug}/upravit`)}>
