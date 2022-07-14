@@ -7,6 +7,7 @@ export const createRecipe = (
   preparationTime,
   servingCount,
   sideDish,
+  imageURI,
 ) => {
   return {
     directions,
@@ -17,5 +18,6 @@ export const createRecipe = (
     servingCount,
     slug: getSlug(title),
     sideDish,
+    imageURI,
   };
 };

@@ -23,6 +23,7 @@ const AddEditRecipeForm = ({ recipe }) => {
   const [ingredients, setIngredients] = useState(
     recipe ? recipe.ingredients : [],
   );
+  const [imageURI, setImageURI] = useState(recipe ? recipe.imageURI : '');
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientAmount, setIngredientAmount] = useState('');
   const [ingredientAmountUnit, setIngredientAmountUnit] = useState('');
@@ -76,7 +77,10 @@ const AddEditRecipeForm = ({ recipe }) => {
       preparationTime,
       servingCount,
       sideDish,
+      imageURI,
     );
+
+    console.log(newRecipe);
 
     const updateRecipe = async (updatedRecipe) => {
       try {
@@ -108,6 +112,7 @@ const AddEditRecipeForm = ({ recipe }) => {
       preparationTime,
       servingCount,
       sideDish,
+      imageURI,
     );
 
     const addRecipe = async (recipe) => {
@@ -200,6 +205,18 @@ const AddEditRecipeForm = ({ recipe }) => {
             placeholder=""
             onChange={({ target }) => setServingCount(target.value)}
             value={servingCount}
+          />
+        </div>
+        <div className="form-group my-4">
+          <label className="block mb-1" htmlFor="preparationTime">
+            Obrázek (URL)
+          </label>
+          <Input
+            type="text"
+            name="imageURI"
+            placeholder=""
+            onChange={({ target }) => setImageURI(target.value)}
+            value={imageURI}
           />
         </div>
       </div>

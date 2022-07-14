@@ -30,6 +30,7 @@ const RecipeDetailPage = () => {
             directions={recipe.directions}
             slug={slug}
             _id={recipe._id}
+            imageURI={recipe.imageURI}
           />
         </div>
       )}

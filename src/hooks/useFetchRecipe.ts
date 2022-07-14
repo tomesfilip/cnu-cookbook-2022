@@ -11,7 +11,6 @@ const useFetchRecipe = (slug) => {
 
     const getData = async () => {
       try {
-        console.log('use fetch recipe triggered');
         const { data } = await api.get(`/recipes/${slug}`);
         setData(data);
         setError(null);
