@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 
 const useFetchSideDishList = () => {
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -15,7 +15,11 @@ const useFetchSideDishList = () => {
         setData(data);
         setError(null);
       } catch (err) {
-        setError(err);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Unexpected error');
+        }
       } finally {
         setIsLoading(false);
       }

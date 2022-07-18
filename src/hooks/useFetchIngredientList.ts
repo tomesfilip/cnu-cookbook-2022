@@ -2,10 +2,10 @@ import { api } from '../api';
 import { useState, useEffect } from 'react';
 
 const useFetchIngredientList = () => {
-  const [data, setData] = useState(null);
-  const [ingredients] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<string[] | null>(null);
+  const [ingredients] = useState<[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -13,13 +13,17 @@ const useFetchIngredientList = () => {
     const getData = async () => {
       try {
         const { data } = await api.get('recipes/ingredients');
-        data.map((ingredient) => {
-          return ingredients.push({ value: ingredient, label: ingredient });
-        });
+        // data.map((ingredient: string) => {
+        //   return ingredients.push({ value: ingredient, label: ingredient });
+        // });
         setData(data);
         setError(null);
       } catch (err) {
-        setError(err);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Unexpected error');
+        }
       } finally {
         setIsLoading(false);
       }

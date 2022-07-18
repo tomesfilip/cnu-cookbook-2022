@@ -20,7 +20,7 @@ const RecipeDetailPage = () => {
       exit="exit"
     >
       {isLoading && <ClipLoader />}
-      {error && <Alert text={error.toString()} />}
+      {error && <Alert text={error ? error.toString() : ''} />}
       {recipe && (
         <div>
           <RecipeDetailCard
@@ -30,7 +30,6 @@ const RecipeDetailPage = () => {
             directions={recipe.directions}
             slug={slug}
             _id={recipe._id}
-            imageURI={recipe.imageURI}
           />
         </div>
       )}

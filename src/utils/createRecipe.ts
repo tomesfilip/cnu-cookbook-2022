@@ -1,23 +1,23 @@
+import IIngredient from '../models/IIngredient';
+import IRecipeDetail from '../models/IRecipeDetail';
 import { getSlug } from './getSlug';
 
 export const createRecipe = (
-  directions,
-  ingredients,
-  title,
-  preparationTime,
-  servingCount,
-  sideDish,
-  imageURI,
-) => {
+  title: string,
+  preparationTime: number,
+  ingredients?: IIngredient[],
+  directions?: string,
+  servingCount?: number,
+  sideDish?: string,
+): IRecipeDetail => {
   return {
-    directions,
-    ingredients,
-    lastModifiedDate: new Date().toISOString(),
     title,
     preparationTime,
+    ingredients,
+    directions,
     servingCount,
+    lastModifiedDate: new Date().toISOString(),
     slug: getSlug(title),
     sideDish,
-    imageURI,
   };
 };

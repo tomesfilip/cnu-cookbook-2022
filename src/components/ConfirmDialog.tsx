@@ -1,7 +1,18 @@
 import OutlineSmButton from './atoms/OutlineSmButton';
-import '../scss/ConfirmDialog.scss';
+import '../assets/styles/ConfirmDialog.scss';
+import { FC } from 'react';
 
-const ConfirmDialog = ({ confirmAction, cancelAction, dialogText }) => {
+interface Props {
+  confirmAction: () => void;
+  cancelAction: () => void;
+  dialogText: string;
+}
+
+const ConfirmDialog: FC<Props> = ({
+  confirmAction,
+  cancelAction,
+  dialogText,
+}) => {
   return (
     <div className="confirm-dialog fixed top-0 right-0 left-0 z-50 md:inset-0 h-full">
       <div className="relative p-4 w-full max-w-md h-auto mx-auto top-1/3">

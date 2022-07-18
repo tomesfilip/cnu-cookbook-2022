@@ -1,29 +1,33 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import useFetchIngredientList from '../hooks/useFetchIngredientList';
+import IRecipeDetail from '../models/IRecipeDetail';
 import { createRecipe } from '../utils/createRecipe';
 import { normalizeText } from '../utils/normalizeText';
 import Input from './atoms/Input';
 import OutlineSmButton from './atoms/OutlineSmButton';
 import Autocomplete from './Autocomplete';
 
-const AddEditRecipeForm = ({ recipe }) => {
+interface Props {
+  recipe: IRecipeDetail;
+}
+
+const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
   const navigate = useNavigate();
   const [title, setTitle] = useState(recipe ? recipe.title : '');
-  const [preparationTime, setPreparationTime] = useState(
+  const [preparationTime, setPreparationTime] = useState<number | string>(
     recipe ? recipe.preparationTime : '',
   );
   const [directions, setDirections] = useState(recipe ? recipe.directions : '');
   const [servingCount, setServingCount] = useState(
     recipe ? recipe.servingCount : '',
   );
-  const [sideDish, setSideDish] = useState(recipe ? recipe.sideDish : '');
+  const [sideDish, setSideDish] = useState(recipe ? recipe?.sideDish : '');
   const [ingredients, setIngredients] = useState(
     recipe ? recipe.ingredients : [],
   );
-  const [imageURI, setImageURI] = useState(recipe ? recipe.imageURI : '');
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientAmount, setIngredientAmount] = useState('');
   const [ingredientAmountUnit, setIngredientAmountUnit] = useState('');
@@ -41,24 +45,26 @@ const AddEditRecipeForm = ({ recipe }) => {
     );
   }, [ingredientName, ingredientAmount, ingredientAmountUnit]);
 
-  const handleRemoveIngredient = (timestamp, id) => {
+  const handleRemoveIngredient = (timestamp?: number, id?: string) => {
     if (timestamp) {
       setIngredients(
-        ingredients.filter((ingredient) => ingredient.timestamp !== timestamp),
+        ingredients?.filter((ingredient) => ingredient.timestamp !== timestamp),
       );
     }
     if (id) {
-      setIngredients(ingredients.filter((ingredient) => ingredient._id !== id));
+      setIngredients(
+        ingredients?.filter((ingredient) => ingredient._id !== id),
+      );
     }
   };
 
   const handleSaveIngredient = () => {
-    ingredients.push({
-      amount: ingredientAmount,
+    ingredients?.push({
+      amount: Number(ingredientAmount),
       amountUnit: ingredientAmountUnit,
       isGroup: false,
       name: ingredientName,
-      timestamp: Date.now().toString(),
+      timestamp: Date.now(),
     });
 
     setIngredientName('');
@@ -66,23 +72,22 @@ const AddEditRecipeForm = ({ recipe }) => {
     setIngredientAmountUnit('');
   };
 
-  const handleUpdateRecipe = (e) => {
+  const handleUpdateRecipe = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
 
     const newRecipe = createRecipe(
-      directions,
-      ingredients,
       title,
-      preparationTime,
-      servingCount,
+      Number(preparationTime),
+      ingredients,
+      directions,
+      Number(servingCount),
       sideDish,
-      imageURI,
     );
 
     console.log(newRecipe);
 
-    const updateRecipe = async (updatedRecipe) => {
+    const updateRecipe = async (updatedRecipe: IRecipeDetail) => {
       try {
         const response = await api.post(
           `/recipes/${recipe._id}`,
@@ -101,21 +106,20 @@ const AddEditRecipeForm = ({ recipe }) => {
     updateRecipe(newRecipe);
   };
 
-  const handleSaveRecipe = (e) => {
+  const handleSaveRecipe = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
 
     const newRecipe = createRecipe(
-      directions,
-      ingredients,
       title,
-      preparationTime,
-      servingCount,
+      Number(preparationTime),
+      ingredients,
+      directions,
+      Number(servingCount),
       sideDish,
-      imageURI,
     );
 
-    const addRecipe = async (recipe) => {
+    const addRecipe = async (recipe: IRecipeDetail) => {
       try {
         const response = await api.post('/recipes', recipe);
         setIsUploading(false);
@@ -131,11 +135,6 @@ const AddEditRecipeForm = ({ recipe }) => {
     addRecipe(newRecipe);
   };
 
-  const handleSugggestionClick = (suggestion) => {
-    setIngredientName(suggestion);
-    setShowSuggestions(false);
-  };
-
   const ingredientSuggestions = availableIngredients
     ? availableIngredients.filter((ingredient) =>
         normalizeText(ingredient).includes(normalizeText(ingredientName)),
@@ -148,7 +147,7 @@ const AddEditRecipeForm = ({ recipe }) => {
       <div className="main-options my-4">
         <button
           className="border-2 border-slate-700 px-4 py-1 text-slate-700 hover:text-white rounded hover:rounded-xl hover:bg-slate-600 transition-all duration-300 ease-in-out mr-8"
-          onClick={recipe ? handleUpdateRecipe : handleSaveRecipe}
+          onClick={() => (recipe ? handleUpdateRecipe : handleSaveRecipe)}
           disabled={isUploading}
           form="recipeForm"
           type="submit"
@@ -207,18 +206,6 @@ const AddEditRecipeForm = ({ recipe }) => {
             value={servingCount}
           />
         </div>
-        <div className="form-group my-4">
-          <label className="block mb-1" htmlFor="preparationTime">
-            Obrázek (URL)
-          </label>
-          <Input
-            type="text"
-            name="imageURI"
-            placeholder=""
-            onChange={({ target }) => setImageURI(target.value)}
-            value={imageURI}
-          />
-        </div>
       </div>
       <div className="form-group ingredients my-4">
         <label className="block mb-1" htmlFor="ingredients">
@@ -238,8 +225,9 @@ const AddEditRecipeForm = ({ recipe }) => {
             {showSuggestions && ingredientName && (
               <Autocomplete
                 suggestionList={ingredientSuggestions}
-                handleSugggestionClick={handleSugggestionClick}
                 noSuggestionText="Neznámá ingredience"
+                setIngredientName={setIngredientName}
+                setShowSuggestions={setShowSuggestions}
               />
             )}
           </div>
@@ -266,21 +254,23 @@ const AddEditRecipeForm = ({ recipe }) => {
         </div>
         <div className="added-ingredients px-4 my-6">
           <ul>
-            {ingredients.map(({ _id, name, amount, amountUnit, timestamp }) => (
-              <div
-                key={timestamp ? timestamp : _id}
-                className="ingredient flex items-center justify-between w-4/5 md:w-3/5 mb-2"
-              >
-                <p>
-                  {name}: {amount} {amountUnit}
-                </p>
-                <OutlineSmButton
-                  onClick={() => handleRemoveIngredient(timestamp, _id)}
+            {ingredients?.map(
+              ({ _id, name, amount, amountUnit, timestamp }) => (
+                <div
+                  key={timestamp ? timestamp : _id}
+                  className="ingredient flex items-center justify-between w-4/5 md:w-3/5 mb-2"
                 >
-                  <MdDeleteOutline size="1.5em" />
-                </OutlineSmButton>
-              </div>
-            ))}
+                  <p>
+                    {name}: {amount} {amountUnit}
+                  </p>
+                  <OutlineSmButton
+                    onClick={() => handleRemoveIngredient(timestamp, _id)}
+                  >
+                    <MdDeleteOutline size="1.5em" />
+                  </OutlineSmButton>
+                </div>
+              ),
+            )}
           </ul>
         </div>
       </div>
@@ -290,7 +280,6 @@ const AddEditRecipeForm = ({ recipe }) => {
         </label>
         <textarea
           className="border-2 rounded-lg px-2 py-1 w-full"
-          type="textarea"
           name="directions"
           placeholder=""
           onChange={({ target }) => setDirections(target.value)}

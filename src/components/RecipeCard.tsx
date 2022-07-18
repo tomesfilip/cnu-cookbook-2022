@@ -1,15 +1,23 @@
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import Placeholder from '../assets/img/food-placeholder.png';
 import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
 
-const RecipeCard = ({ title, preparationTime, slug, sideDish, imageURI }) => {
+interface Props {
+  title: string;
+  preparationTime: number;
+  slug: string;
+  sideDish?: string;
+}
+
+const RecipeCard: FC<Props> = ({ title, preparationTime, slug, sideDish }) => {
   return (
     <div className="recipe-card px-4 py-2 mx-2 rounded-lg hover:rounded-xl hover:shadow-md transition-all">
       <Link to={`/recept/${slug}`} className="text-reset text-decoration-none">
         <img
           className="object-cover rounded-lg w-full h-64"
-          src={imageURI ? imageURI : Placeholder}
+          src={Placeholder}
           alt={title}
         />
         <div className="recipe-card-body mt-2 px-3">

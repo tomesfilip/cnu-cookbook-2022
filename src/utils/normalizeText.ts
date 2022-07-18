@@ -1,4 +1,4 @@
-export const normalizeText = (text) => {
+export const normalizeText = (text: string): string => {
   return text
     .toLowerCase()
     .normalize('NFD')

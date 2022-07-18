@@ -1,4 +1,4 @@
-export const getNormalizedPrepTime = (prepTimeMinutes) => {
+export const getNormalizedPrepTime = (prepTimeMinutes: number): string => {
   const hours = Math.floor(prepTimeMinutes / 60)
     ? Math.floor(prepTimeMinutes / 60).toString() + ' h'
     : '';

@@ -1,4 +1,11 @@
-const PreparationTimeRangeFilter = ({
+import { FC } from 'react';
+
+interface Props {
+  maxPrepTime: number;
+  handleMaxPrepTimeChange: () => void;
+}
+
+const PreparationTimeRangeFilter: FC<Props> = ({
   maxPrepTime,
   handleMaxPrepTimeChange,
 }) => {

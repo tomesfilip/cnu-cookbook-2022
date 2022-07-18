@@ -1,4 +1,10 @@
-const Alert = ({ text }) => {
+import { FC } from 'react';
+
+interface Props {
+  text: string;
+}
+
+const Alert: FC<Props> = ({ text }) => {
   return (
     <div className="text-center py-4 lg:px-4 max-w-max mx-auto">
       <div

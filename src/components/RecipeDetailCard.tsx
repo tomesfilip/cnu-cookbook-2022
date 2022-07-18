@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { MdDeleteOutline, MdModeEditOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import PlaceHolder from '../assets/img/food-placeholder.png';
+import IRecipeDetail from '../models/IRecipeDetail';
 import OutlineSmButton from './atoms/OutlineSmButton';
 import ConfirmDialog from './ConfirmDialog';
 import Timebox from './Timebox';
 
-const RecipeDetailCard = ({
+const RecipeDetailCard: FC<IRecipeDetail> = ({
   title,
   preparationTime,
   ingredients,
   directions,
   slug,
   _id,
-  imageURI,
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -49,7 +49,7 @@ const RecipeDetailCard = ({
       )}
       <img
         className="object-cover rounded-lg h-80 sm:h-96 w-96"
-        src={imageURI ? imageURI : PlaceHolder}
+        src={PlaceHolder}
         alt={title}
       />
       <h2 className="my-2 text-2xl font-medium">{title}</h2>
@@ -62,9 +62,9 @@ const RecipeDetailCard = ({
         </OutlineSmButton>
       </div>
       <Timebox preparationTime={preparationTime} />
-      {ingredients.length > 0 && (
+      {ingredients && (
         <ul className="bg-slate-100 p-4 rounded-lg">
-          {ingredients.map(({ _id, amount, amountUnit, name }) => (
+          {ingredients?.map(({ _id, amount, amountUnit, name }) => (
             <li key={_id}>
               {amount} {amountUnit} - {name}
             </li>

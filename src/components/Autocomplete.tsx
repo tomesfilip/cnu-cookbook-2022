@@ -1,9 +1,24 @@
-const Autocomplete = ({
+import React, { FC } from 'react';
+
+interface Props {
+  suggestionList: string[];
+  setIngredientName: React.Dispatch<React.SetStateAction<string>>;
+  setShowSuggestions: React.Dispatch<React.SetStateAction<boolean>>;
+  noSuggestionText: string;
+  limit?: number;
+}
+
+const Autocomplete: FC<Props> = ({
   suggestionList,
-  handleSugggestionClick,
+  setIngredientName,
+  setShowSuggestions,
   noSuggestionText,
   limit = 5,
 }) => {
+  const handleSuggestionClick = (suggestion: string) => {
+    setIngredientName(suggestion);
+    setShowSuggestions(false);
+  };
   return (
     <ul className="absolute z-10 bg-slate-400 w-full p-2 rounded-lg mt-1">
       {suggestionList.length < 1 && (
@@ -13,7 +28,7 @@ const Autocomplete = ({
         <li
           key={suggestion}
           className="rounded-lg px-2 hover:bg-slate-200 cursor-pointer"
-          onClick={() => handleSugggestionClick(suggestion)}
+          onClick={() => handleSuggestionClick(suggestion)}
         >
           {suggestion}
         </li>

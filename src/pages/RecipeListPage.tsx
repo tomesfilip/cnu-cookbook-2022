@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 import SearchInput from '../components/SearchInput';
 import RecipesList from '../components/RecipesList';
-import useFetchRecipes from '../hooks/useFetchRecipes';
+import useFetchRecipeList from '../hooks/useFetchRecipeList';
 import FloatingButton from '../components/atoms/FloatingButton';
 import Alert from '../components/Alert';
 import { ClipLoader } from 'react-spinners';
@@ -15,7 +15,7 @@ import { normalizeText } from '../utils/normalizeText';
 import { containerVariants } from '../framerVariants/containerVariants';
 
 const RecipeListPage = () => {
-  const { data: recipes, isLoading, error } = useFetchRecipes();
+  const { data: recipes, isLoading, error } = useFetchRecipeList();
   const [searchValue, setSearchValue] = useState('');
   const [maxPrepTime, setMaxPrepTime] = useState(1000);
   const [sortByOption, setSortByOption] = useState('name');

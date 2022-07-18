@@ -1,7 +1,13 @@
+import { FC, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import '../../scss/FloatingButton.scss';
+import '../../assets/styles/FloatingButton.scss';
 
-const FloatingButton = ({ linkTo, children }) => {
+interface Props {
+  linkTo: string;
+  children?: ReactNode;
+}
+
+const FloatingButton: FC<Props> = ({ linkTo, children }) => {
   return (
     <Link
       to={linkTo}

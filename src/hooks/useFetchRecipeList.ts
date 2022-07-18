@@ -1,10 +1,11 @@
 import { api } from '../api';
 import { useState, useEffect } from 'react';
+import IRecipeList from '../models/IRecipeList';
 
-const useFetchRecipes = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+const useFetchRecipeList = () => {
+  const [data, setData] = useState<IRecipeList | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -15,7 +16,11 @@ const useFetchRecipes = () => {
         setData(data);
         setError(null);
       } catch (err) {
-        setError(err);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Unexpected error');
+        }
       } finally {
         setIsLoading(false);
       }
@@ -28,4 +33,4 @@ const useFetchRecipes = () => {
   return { data, isLoading, error };
 };
 
-export default useFetchRecipes;
+export default useFetchRecipeList;
