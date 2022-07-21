@@ -2,12 +2,12 @@ import { FC } from 'react';
 
 interface Props {
   maxPrepTime: number;
-  handleMaxPrepTimeChange: () => void;
+  setMaxPrepTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const PreparationTimeRangeFilter: FC<Props> = ({
   maxPrepTime,
-  handleMaxPrepTimeChange,
+  setMaxPrepTime,
 }) => {
   return (
     <div className="preparation-time-range-filter accent-slate-600 md:mx-8">
@@ -23,7 +23,7 @@ const PreparationTimeRangeFilter: FC<Props> = ({
         step="5"
         id="prepTimeInput"
         value={maxPrepTime}
-        onChange={handleMaxPrepTimeChange}
+        onChange={({ target }) => setMaxPrepTime(Number(target.value))}
       ></input>
     </div>
   );

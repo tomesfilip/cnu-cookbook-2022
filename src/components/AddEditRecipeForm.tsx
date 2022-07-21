@@ -11,7 +11,7 @@ import OutlineSmButton from './atoms/OutlineSmButton';
 import Autocomplete from './Autocomplete';
 
 interface Props {
-  recipe: IRecipeDetail;
+  recipe?: IRecipeDetail;
 }
 
 const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
@@ -90,7 +90,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     const updateRecipe = async (updatedRecipe: IRecipeDetail) => {
       try {
         const response = await api.post(
-          `/recipes/${recipe._id}`,
+          `/recipes/${recipe?._id}`,
           updatedRecipe,
         );
         setIsUploading(false);

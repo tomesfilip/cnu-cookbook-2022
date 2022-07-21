@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Select from 'react-select';
+import Select, { Theme } from 'react-select';
 import { motion } from 'framer-motion';
 
 import SearchInput from '../components/SearchInput';
@@ -9,18 +9,22 @@ import FloatingButton from '../components/atoms/FloatingButton';
 import Alert from '../components/Alert';
 import { ClipLoader } from 'react-spinners';
 import PreparationTimeRangeFilter from '../components/PreparationTimeRangeFilter';
-import plusImg from '../assets/img/add.svg';
 import { MdOutlineAdd } from 'react-icons/md';
 import { normalizeText } from '../utils/normalizeText';
 import { containerVariants } from '../framerVariants/containerVariants';
 
 const RecipeListPage = () => {
   const { data: recipes, isLoading, error } = useFetchRecipeList();
-  const [searchValue, setSearchValue] = useState('');
-  const [maxPrepTime, setMaxPrepTime] = useState(1000);
-  const [sortByOption, setSortByOption] = useState('name');
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [maxPrepTime, setMaxPrepTime] = useState<number>(1000);
+  const [sortByOption, setSortByOption] = useState<SortOption | null>(null);
 
-  const sortOptions = [
+  interface SortOption {
+    value: string;
+    label: string;
+  }
+
+  const sortOptions: SortOption[] = [
     { value: 'name', label: 'Názvu [A-Z]' },
     { value: 'time', label: 'Času přípravy (od nejkratšího)' },
   ];
@@ -35,15 +39,11 @@ const RecipeListPage = () => {
     : [];
 
   const sortedRecipes =
-    sortByOption === 'time'
+    sortByOption?.value === 'time'
       ? filteredRecipes.sort((a, b) => a.preparationTime - b.preparationTime)
-      : filteredRecipes.sort((a, b) => a.title - b.title);
+      : filteredRecipes.sort();
 
-  const handleMaxPrepTimeChange = ({ target }) => setMaxPrepTime(target.value);
-  const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
-  const handleSortChange = ({ value }) => setSortByOption(value);
-
-  const recipeTheme = (theme) => {
+  const recipeTheme = (theme: Theme) => {
     return {
       ...theme,
       colors: {
@@ -63,26 +63,21 @@ const RecipeListPage = () => {
       exit="exit"
     >
       <h1 className="text-4xl text-stone-700">Recepty</h1>
-      <FloatingButton
-        linkText="Pridaj recept"
-        linkTo="/pridat-recept"
-        imgSrc={plusImg}
-        imgAlt="znak plus"
-      >
+      <FloatingButton linkTo="/pridat-recept">
         <MdOutlineAdd size="2em" />
       </FloatingButton>
       <div className="w-full flex flex-wrap md:items-center flex-col md:flex-row">
-        <SearchInput onChange={handleSearchInputChange} value={searchValue} />
+        <SearchInput setValue={setSearchValue} value={searchValue} />
         <PreparationTimeRangeFilter
           maxPrepTime={maxPrepTime}
-          handleMaxPrepTimeChange={handleMaxPrepTimeChange}
+          setMaxPrepTime={setMaxPrepTime}
         />
         <div className="sort-options">
           Seřadit podle
           <Select
             defaultValue={sortOptions[0]}
             options={sortOptions}
-            onChange={handleSortChange}
+            onChange={(option: SortOption | null) => setSortByOption(option)}
             theme={recipeTheme}
           />
         </div>

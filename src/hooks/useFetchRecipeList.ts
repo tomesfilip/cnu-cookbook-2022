@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import IRecipeList from '../models/IRecipeList';
 
 const useFetchRecipeList = () => {
-  const [data, setData] = useState<IRecipeList | null>(null);
+  const [data, setData] = useState<IRecipeList[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
