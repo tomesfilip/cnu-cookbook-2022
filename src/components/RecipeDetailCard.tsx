@@ -59,16 +59,30 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
       </div>
       <Timebox preparationTime={preparationTime} />
       {ingredients && (
-        <ul className="bg-slate-100 p-4 rounded-lg">
-          {ingredients?.map(({ _id, amount, amountUnit, name }) => (
-            <li key={_id}>
-              {amount} {amountUnit} - {name}
-            </li>
-          ))}
-        </ul>
+        <div className="ingredients bg-slate-100 p-4 rounded-lg w-4/5">
+          <ul className="max-w-sm">
+            {ingredients?.map(({ _id, amount, amountUnit, name, isGroup }) =>
+              isGroup ? (
+                <h2 key={_id} className="font-bold text-lg mt-2">
+                  {name}
+                </h2>
+              ) : (
+                <li key={_id} className="grid grid-cols-12">
+                  <span className="col-span-4">
+                    {amount} {amountUnit}
+                  </span>
+                  <span className="col-span-8">{name}</span>
+                </li>
+              ),
+            )}
+          </ul>
+        </div>
       )}
       {directions && (
-        <MarkdownView className="directions p-6" markdown={directions} />
+        <MarkdownView
+          className="directions p-4 lg:w-4/5"
+          markdown={directions}
+        />
       )}
     </div>
   );

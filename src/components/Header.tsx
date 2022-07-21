@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const Header = () => {
   return (
     <header className="w-full bg-slate-600">
-      <nav className="container mx-auto py-2 flex justify-between items-center text-white">
+      <nav className="container mx-auto py-2 px-4 flex justify-between items-center text-white">
         <a href="/" className="text-4xl">
           Cookbook
         </a>
