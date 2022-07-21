@@ -1,12 +1,14 @@
 import { FC, useState } from 'react';
 import { MdDeleteOutline, MdModeEditOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import MarkdownView from 'react-showdown';
 import { api } from '../api';
 import PlaceHolder from '../assets/img/food-placeholder.png';
 import IRecipeDetail from '../models/IRecipeDetail';
 import OutlineSmButton from './atoms/OutlineSmButton';
 import ConfirmDialog from './ConfirmDialog';
 import Timebox from './Timebox';
+import '../assets/styles/Directions.scss';
 
 const RecipeDetailCard: FC<IRecipeDetail> = ({
   title,
@@ -16,15 +18,9 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
   slug,
   _id,
 }) => {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  const parsedDirections = directions
-    ? directions
-        .split(/([0-9])\.+ /g)
-        .filter((direction) => direction.length > 1)
-    : [];
 
   const handleDeteleRecipe = async () => {
     setIsDeleting(true);
@@ -71,14 +67,8 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
           ))}
         </ul>
       )}
-      {parsedDirections.length > 0 && (
-        <ol className="p-4">
-          {parsedDirections.map((direction) => (
-            <li className="mb-3" key={direction}>
-              {direction}
-            </li>
-          ))}
-        </ol>
+      {directions && (
+        <MarkdownView className="directions p-6" markdown={directions} />
       )}
     </div>
   );

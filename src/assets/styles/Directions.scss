@@ -1,0 +1,14 @@
+.directions {
+  p {
+    strong {
+      margin: 1rem 0 0.2rem 0;
+    }
+  }
+  ol {
+    list-style: decimal;
+    list-style-position: inside;
+    li {
+      margin-bottom: 0.8rem;
+    }
+  }
+}
