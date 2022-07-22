@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Layout from './components/Layout';
@@ -8,6 +9,7 @@ const App = () => {
     <Router>
       <Layout>
         <Routes />
+        <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
       </Layout>
     </Router>
   );

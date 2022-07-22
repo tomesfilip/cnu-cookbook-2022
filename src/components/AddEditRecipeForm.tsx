@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { MdDeleteOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
@@ -72,7 +73,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     setIngredientAmountUnit('');
   };
 
-  const handleUpdateRecipe = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateRecipe = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
 
@@ -85,8 +86,6 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
       sideDish,
     );
 
-    console.log(newRecipe);
-
     const updateRecipe = async (updatedRecipe: IRecipeDetail) => {
       try {
         const response = await api.post(
@@ -96,9 +95,10 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
         setIsUploading(false);
         if (response.status === 200) {
           navigate(`/recept/${updatedRecipe.slug}`);
+          toast.success('Recept byl aktualizován!');
         }
       } catch (err) {
-        console.log(err);
+        toast.error(`Chybička se vloudila: ${err}`);
         setIsUploading(false);
       }
     };
@@ -106,7 +106,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     updateRecipe(newRecipe);
   };
 
-  const handleSaveRecipe = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSaveRecipe = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
 
@@ -125,9 +125,10 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
         setIsUploading(false);
         if (response.status === 201) {
           navigate('/');
+          toast.success('Recept byl vytvořen!');
         }
       } catch (err) {
-        console.log(err);
+        toast.error(`Chybička se vloudila: ${err}`);
         setIsUploading(false);
       }
     };
@@ -142,12 +143,14 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     : [];
 
   return (
-    <form id="recipeForm">
+    <form
+      id="recipeForm"
+      onSubmit={(e) => (recipe ? handleUpdateRecipe(e) : handleSaveRecipe(e))}
+    >
       <h2 className="text-xl">{recipe ? 'Upravit' : 'Přidat'} recept</h2>
       <div className="main-options my-4">
         <button
           className="border-2 border-slate-700 px-4 py-1 text-slate-700 hover:text-white rounded hover:rounded-xl hover:bg-slate-600 transition-all duration-300 ease-in-out mr-8"
-          onClick={() => (recipe ? handleUpdateRecipe : handleSaveRecipe)}
           disabled={isUploading}
           form="recipeForm"
           type="submit"

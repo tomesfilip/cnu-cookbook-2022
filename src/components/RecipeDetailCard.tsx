@@ -9,6 +9,7 @@ import OutlineSmButton from './atoms/OutlineSmButton';
 import ConfirmDialog from './ConfirmDialog';
 import Timebox from './Timebox';
 import '../assets/styles/Directions.scss';
+import toast from 'react-hot-toast';
 
 const RecipeDetailCard: FC<IRecipeDetail> = ({
   title,
@@ -27,9 +28,10 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
     try {
       const response = await api.delete(`/recipes/${_id}`);
       setIsDeleting(false);
+      toast.success('Recept úspěšne zmazán.');
       navigate('/');
     } catch (err) {
-      console.log(err);
+      toast.error(`Chybička se vloudila: ${err}`);
       setIsDeleting(false);
     }
   };
@@ -58,7 +60,7 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
         </OutlineSmButton>
       </div>
       <Timebox preparationTime={preparationTime} />
-      {ingredients && (
+      {ingredients && ingredients.length > 0 && (
         <div className="ingredients bg-slate-100 p-4 rounded-lg w-4/5">
           <ul className="max-w-sm">
             {ingredients?.map(({ _id, amount, amountUnit, name, isGroup }) =>
