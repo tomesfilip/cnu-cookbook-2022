@@ -7,9 +7,9 @@ import PlaceHolder from '../assets/img/food-placeholder.png';
 import IRecipeDetail from '../models/IRecipeDetail';
 import OutlineSmButton from './atoms/OutlineSmButton';
 import ConfirmDialog from './ConfirmDialog';
-import Timebox from './Timebox';
 import '../assets/styles/Directions.scss';
 import toast from 'react-hot-toast';
+import TimeBox from './Timebox';
 
 const RecipeDetailCard: FC<IRecipeDetail> = ({
   title,
@@ -59,7 +59,7 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
           <MdDeleteOutline size="1.5em" />
         </OutlineSmButton>
       </div>
-      <Timebox preparationTime={preparationTime} />
+      <TimeBox preparationTime={preparationTime} />
       {ingredients && ingredients.length > 0 && (
         <div className="ingredients bg-slate-100 p-4 rounded-lg w-4/5">
           <ul className="max-w-sm">

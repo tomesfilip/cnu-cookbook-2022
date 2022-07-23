@@ -1,89 +1,73 @@
-import { FC, FormEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { MdDeleteOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
-import useFetchIngredientList from '../hooks/useFetchIngredientList';
 import IRecipeDetail from '../models/IRecipeDetail';
 import { createRecipe } from '../utils/createRecipe';
-import { normalizeText } from '../utils/normalizeText';
-import Input from './atoms/Input';
 import OutlineSmButton from './atoms/OutlineSmButton';
-import Autocomplete from './Autocomplete';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import '../assets/styles/RecipeForm.scss';
+import IngredientInputForm from './IngredientInputForm';
+import IIngredient from '../models/IIngredient';
 
 interface Props {
   recipe?: IRecipeDetail;
 }
 
+type RecipeFormValues = {
+  title: string;
+  preparationTime: number;
+  directions: string;
+  servingCount: number;
+  sideDish: string;
+};
+
 const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState(recipe ? recipe.title : '');
-  const [preparationTime, setPreparationTime] = useState<number | string>(
+  const [title] = useState<string>(recipe ? recipe.title : '');
+  const [preparationTime] = useState<number | string>(
     recipe ? recipe.preparationTime : '',
   );
-  const [directions, setDirections] = useState(recipe ? recipe.directions : '');
-  const [servingCount, setServingCount] = useState(
-    recipe ? recipe.servingCount : '',
+  const [directions] = useState(recipe ? recipe.directions : '');
+  const [servingCount] = useState(recipe ? recipe.servingCount : '');
+  const [sideDish] = useState(recipe ? recipe?.sideDish : '');
+  const [ingredients, setIngredients] = useState<IIngredient[] | []>(
+    recipe?.ingredients ? recipe.ingredients : [],
   );
-  const [sideDish, setSideDish] = useState(recipe ? recipe?.sideDish : '');
-  const [ingredients, setIngredients] = useState(
-    recipe ? recipe.ingredients : [],
-  );
-  const [ingredientName, setIngredientName] = useState('');
-  const [ingredientAmount, setIngredientAmount] = useState('');
-  const [ingredientAmountUnit, setIngredientAmountUnit] = useState('');
-  const [canSaveIngredient, setCanSaveIngredient] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+
   const [isUploading, setIsUploading] = useState(false);
 
-  const { data: availableIngredients } = useFetchIngredientList();
+  const validationSchema = Yup.object().shape({
+    title: Yup.string()
+      .required('Recept potřebuje název')
+      .max(60, 'Název receptu nesmí být delší než 60 znakú.'),
+    preparationTime: Yup.number().required('Recept musí obsahovat dobu trvání'),
+    directions: Yup.string().required(
+      'Aby někdo ukuchtil tvúj recept, je nutné mu dát postup',
+    ),
+  });
 
-  useEffect(() => {
-    setCanSaveIngredient(
-      [ingredientName, ingredientAmount, ingredientAmountUnit].every(
-        (argument) => argument.length > 0,
-      ),
-    );
-  }, [ingredientName, ingredientAmount, ingredientAmountUnit]);
-
-  const handleRemoveIngredient = (timestamp?: number, id?: string) => {
-    if (timestamp) {
-      setIngredients(
-        ingredients?.filter((ingredient) => ingredient.timestamp !== timestamp),
-      );
-    }
-    if (id) {
-      setIngredients(
-        ingredients?.filter((ingredient) => ingredient._id !== id),
-      );
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RecipeFormValues>({ resolver: yupResolver(validationSchema) });
+  const onSubmit = (data: RecipeFormValues) => {
+    recipe ? handleUpdateRecipe(data) : handleSaveRecipe(data);
   };
 
-  const handleSaveIngredient = () => {
-    ingredients?.push({
-      amount: Number(ingredientAmount),
-      amountUnit: ingredientAmountUnit,
-      isGroup: false,
-      name: ingredientName,
-      timestamp: Date.now(),
-    });
-
-    setIngredientName('');
-    setIngredientAmount('');
-    setIngredientAmountUnit('');
-  };
-
-  const handleUpdateRecipe = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleUpdateRecipe = (recipeData: RecipeFormValues) => {
     setIsUploading(true);
 
     const newRecipe = createRecipe(
-      title,
-      Number(preparationTime),
+      recipeData.title,
+      recipeData.preparationTime,
       ingredients,
-      directions,
-      Number(servingCount),
-      sideDish,
+      recipeData.directions,
+      recipeData.servingCount,
+      recipeData.sideDish,
     );
 
     const updateRecipe = async (updatedRecipe: IRecipeDetail) => {
@@ -106,17 +90,16 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     updateRecipe(newRecipe);
   };
 
-  const handleSaveRecipe = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSaveRecipe = (recipeData: RecipeFormValues) => {
     setIsUploading(true);
 
     const newRecipe = createRecipe(
-      title,
-      Number(preparationTime),
+      recipeData.title,
+      recipeData.preparationTime,
       ingredients,
-      directions,
-      Number(servingCount),
-      sideDish,
+      recipeData.directions,
+      recipeData.servingCount,
+      recipeData.sideDish,
     );
 
     const addRecipe = async (recipe: IRecipeDetail) => {
@@ -136,17 +119,8 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     addRecipe(newRecipe);
   };
 
-  const ingredientSuggestions = availableIngredients
-    ? availableIngredients.filter((ingredient) =>
-        normalizeText(ingredient).includes(normalizeText(ingredientName)),
-      )
-    : [];
-
   return (
-    <form
-      id="recipeForm"
-      onSubmit={(e) => (recipe ? handleUpdateRecipe(e) : handleSaveRecipe(e))}
-    >
+    <form id="recipeForm" onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-xl">{recipe ? 'Upravit' : 'Přidat'} recept</h2>
       <div className="main-options my-4">
         <button
@@ -164,130 +138,66 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
           <label className="block mb-1" htmlFor="recipeTitle">
             Název
           </label>
-          <Input
+          <input
             type="text"
-            name="recipeTitle"
-            placeholder=""
-            required
-            onChange={({ target }) => setTitle(target.value)}
-            value={title}
+            id="recipe-title"
+            aria-invalid={errors.title ? 'true' : 'false'}
+            {...register('title')}
           />
+          <div className="invalid-feedback">{errors.title?.message}</div>
         </div>
         <div className="form-group">
           <label className="block mb-1" htmlFor="recipeTitle">
             Příloha
           </label>
-          <Input
+          <input
             type="text"
-            name="recipeSideDish"
+            id="recipeSideDish"
             placeholder=""
-            onChange={({ target }) => setSideDish(target.value)}
-            value={sideDish}
+            {...register('sideDish')}
           />
         </div>
         <div className="form-group">
           <label className="block mb-1" htmlFor="preparationTime">
             Doba přípravy (min)
           </label>
-          <Input
+          <input
             type="number"
-            name="preparationTime"
-            placeholder=""
-            onChange={({ target }) => setPreparationTime(target.value)}
-            value={preparationTime}
+            id="preparationTime"
+            defaultValue={0}
+            aria-invalid={errors.preparationTime ? 'true' : 'false'}
+            {...register('preparationTime')}
           />
+          <div className="invalid-feedback">
+            {errors.preparationTime?.message}
+          </div>
         </div>
         <div className="form-group">
-          <label className="block mb-1" htmlFor="preparationTime">
+          <label className="block mb-1" htmlFor="servingCount">
             Počet porcí
           </label>
-          <Input
+          <input
             type="number"
-            name="preparationTime"
-            placeholder=""
-            onChange={({ target }) => setServingCount(target.value)}
-            value={servingCount}
+            id="servingCount"
+            {...register('servingCount')}
           />
         </div>
       </div>
-      <div className="form-group ingredients my-4">
-        <label className="block mb-1" htmlFor="ingredients">
-          Ingredience
-        </label>
-        <div className="options flex flex-wrap gap-x-8 gap-y-4">
-          <div className="autocomplete relative w-48">
-            <Input
-              type="text"
-              name="ingredientName"
-              placeholder="název"
-              autoComplete="off"
-              onChange={({ target }) => setIngredientName(target.value)}
-              value={ingredientName}
-              onFocus={() => setShowSuggestions(true)}
-            />
-            {showSuggestions && ingredientName && (
-              <Autocomplete
-                suggestionList={ingredientSuggestions}
-                noSuggestionText="Neznámá ingredience"
-                setIngredientName={setIngredientName}
-                setShowSuggestions={setShowSuggestions}
-              />
-            )}
-          </div>
-          <Input
-            type="number"
-            name="ingredientAmount"
-            placeholder="množství"
-            onChange={({ target }) => setIngredientAmount(target.value)}
-            value={ingredientAmount}
-          />
-          <Input
-            type="text"
-            name="ingredientUnit"
-            placeholder="jednotka"
-            onChange={({ target }) => setIngredientAmountUnit(target.value)}
-            value={ingredientAmountUnit}
-          />
-          <OutlineSmButton
-            disabled={!canSaveIngredient}
-            onClick={handleSaveIngredient}
-          >
-            Přidat
-          </OutlineSmButton>
-        </div>
-        <div className="added-ingredients px-4 my-6">
-          <ul>
-            {ingredients?.map(
-              ({ _id, name, amount, amountUnit, timestamp }) => (
-                <div
-                  key={timestamp ? timestamp : _id}
-                  className="ingredient flex items-center justify-between w-4/5 md:w-3/5 mb-2"
-                >
-                  <p>
-                    {name}: {amount} {amountUnit}
-                  </p>
-                  <OutlineSmButton
-                    onClick={() => handleRemoveIngredient(timestamp, _id)}
-                  >
-                    <MdDeleteOutline size="1.5em" />
-                  </OutlineSmButton>
-                </div>
-              ),
-            )}
-          </ul>
-        </div>
-      </div>
+      <IngredientInputForm
+        ingredients={ingredients}
+        setIngredients={setIngredients}
+      />
       <div className="form-group mb-6">
         <label className="block my-1" htmlFor="directions">
           Postup přípravy
         </label>
         <textarea
           className="border-2 rounded-lg px-2 py-1 w-full"
-          name="directions"
-          placeholder=""
-          onChange={({ target }) => setDirections(target.value)}
-          value={directions}
+          id="directions"
+          aria-invalid={errors.directions ? 'true' : 'false'}
+          {...register('directions')}
         />
+        <div className="invalid-feedback">{errors.directions?.message}</div>
       </div>
     </form>
   );

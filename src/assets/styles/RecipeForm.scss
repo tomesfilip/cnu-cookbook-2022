@@ -1,0 +1,11 @@
+#recipeForm {
+  input {
+    border-width: 2px;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .invalid-feedback {
+    color: red;
+  }
+}

@@ -6,7 +6,7 @@ interface Props {
   preparationTime: number;
 }
 
-const Timebox: FC<Props> = ({ preparationTime }) => {
+const TimeBox: FC<Props> = ({ preparationTime }) => {
   return (
     <div className="time-box flex gap-x-2 items-center my-4">
       <img src={timer} alt="kitchen timer" className="w-8 h-8" />
@@ -14,4 +14,4 @@ const Timebox: FC<Props> = ({ preparationTime }) => {
     </div>
   );
 };
-export default Timebox;
+export default TimeBox;
