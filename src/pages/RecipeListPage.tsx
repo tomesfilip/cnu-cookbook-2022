@@ -84,7 +84,7 @@ const RecipeListPage = () => {
       </div>
       {isLoading && <ClipLoader />}
       {error && <Alert text={error.toString()} />}
-      {sortedRecipes.length < 1 ? (
+      {!error && sortedRecipes.length < 1 ? (
         <h2>K zvoleným filtrom nebyly nalezeny žádné recepty</h2>
       ) : (
         <RecipesList recipes={sortedRecipes} />

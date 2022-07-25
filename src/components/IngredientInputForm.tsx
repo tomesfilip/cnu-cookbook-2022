@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
 import useFetchIngredientList from '../hooks/useFetchIngredientList';
 import IIngredient from '../models/IIngredient';
@@ -15,25 +15,17 @@ interface Props {
 const IngredientInputForm: FC<Props> = ({ ingredients, setIngredients }) => {
   const [ingredientName, setIngredientName] = useState<string>('');
   const [ingredientAmount, setIngredientAmount] = useState<string>('');
+  const [ingredientIsGroup, setIngredientIsGroup] = useState<boolean>(false);
   const [ingredientAmountUnit, setIngredientAmountUnit] = useState<string>('');
-  const [canSaveIngredient, setCanSaveIngredient] = useState<boolean>(false);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
   const { data: availableIngredients } = useFetchIngredientList();
-
-  useEffect(() => {
-    setCanSaveIngredient(
-      [ingredientName, ingredientAmount, ingredientAmountUnit].every(
-        (argument) => argument.length > 0,
-      ),
-    );
-  }, [ingredientName, ingredientAmount, ingredientAmountUnit]);
 
   const handleSaveIngredient = () => {
     ingredients?.push({
       amount: Number(ingredientAmount),
       amountUnit: ingredientAmountUnit,
-      isGroup: false,
+      isGroup: ingredientIsGroup,
       name: ingredientName,
       timestamp: Date.now(),
     });
@@ -102,7 +94,7 @@ const IngredientInputForm: FC<Props> = ({ ingredients, setIngredients }) => {
           value={ingredientAmountUnit}
         />
         <OutlineSmButton
-          disabled={!canSaveIngredient}
+          disabled={!ingredientName}
           onClick={handleSaveIngredient}
         >
           Přidat
@@ -113,12 +105,15 @@ const IngredientInputForm: FC<Props> = ({ ingredients, setIngredients }) => {
           {ingredients?.map(({ _id, name, amount, amountUnit, timestamp }) => (
             <div
               key={timestamp ? timestamp : _id}
-              className="ingredient flex items-center justify-between w-4/5 md:w-3/5 mb-2"
+              className="ingredient grid grid-cols-12 items-center justify-between w-4/5 md:w-3/5 mb-2"
             >
-              <p>
+              <input className="col-span-2" name="is-group" type="checkbox" />
+
+              <p className="col-span-8">
                 {name}: {amount} {amountUnit}
               </p>
               <OutlineSmButton
+                className="col-span-4"
                 onClick={() => handleRemoveIngredient(timestamp, _id)}
               >
                 <MdDeleteOutline size="1.5em" />

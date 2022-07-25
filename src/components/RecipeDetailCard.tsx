@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { MdDeleteOutline, MdModeEditOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import MarkdownView from 'react-showdown';
+import ReactMarkdown from 'react-markdown';
 import { api } from '../api';
 import PlaceHolder from '../assets/img/food-placeholder.png';
 import IRecipeDetail from '../models/IRecipeDetail';
@@ -10,6 +10,7 @@ import ConfirmDialog from './ConfirmDialog';
 import '../assets/styles/Directions.scss';
 import toast from 'react-hot-toast';
 import TimeBox from './Timebox';
+import { getNormalizedDirections } from '../utils/getNormalizedDirections';
 
 const RecipeDetailCard: FC<IRecipeDetail> = ({
   title,
@@ -61,7 +62,7 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
       </div>
       <TimeBox preparationTime={preparationTime} />
       {ingredients && ingredients.length > 0 && (
-        <div className="ingredients bg-slate-100 p-4 rounded-lg w-4/5">
+        <div className="ingredients bg-slate-100 p-4 mt-6 mb-12 rounded-lg w-4/5">
           <ul className="max-w-sm">
             {ingredients?.map(({ _id, amount, amountUnit, name, isGroup }) =>
               isGroup ? (
@@ -81,9 +82,9 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
         </div>
       )}
       {directions && (
-        <MarkdownView
+        <ReactMarkdown
           className="directions p-4 lg:w-4/5"
-          markdown={directions}
+          children={getNormalizedDirections(directions)}
         />
       )}
     </div>

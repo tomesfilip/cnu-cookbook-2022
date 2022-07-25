@@ -1,15 +1,17 @@
 import IIngredient from '../models/IIngredient';
 import IRecipeDetail from '../models/IRecipeDetail';
+import RecipeFormValues from '../models/RecipeFormValues';
+import IRecipeFormValues from '../models/RecipeFormValues';
 import { getSlug } from './getSlug';
 
-export const createRecipe = (
-  title: string,
-  preparationTime: number,
-  ingredients?: IIngredient[],
-  directions?: string,
-  servingCount?: number,
-  sideDish?: string,
-): IRecipeDetail => {
+export const createRecipe = ({
+  title,
+  preparationTime,
+  ingredients,
+  directions,
+  servingCount,
+  sideDish,
+}: RecipeFormValues): IRecipeDetail => {
   return {
     title,
     preparationTime,

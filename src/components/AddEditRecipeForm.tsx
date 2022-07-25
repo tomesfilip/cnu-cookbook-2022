@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from 'react';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -11,28 +11,14 @@ import * as Yup from 'yup';
 import '../assets/styles/RecipeForm.scss';
 import IngredientInputForm from './IngredientInputForm';
 import IIngredient from '../models/IIngredient';
+import RecipeFormValues from '../models/RecipeFormValues';
 
 interface Props {
   recipe?: IRecipeDetail;
 }
 
-type RecipeFormValues = {
-  title: string;
-  preparationTime: number;
-  directions: string;
-  servingCount: number;
-  sideDish: string;
-};
-
 const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
   const navigate = useNavigate();
-  const [title] = useState<string>(recipe ? recipe.title : '');
-  const [preparationTime] = useState<number | string>(
-    recipe ? recipe.preparationTime : '',
-  );
-  const [directions] = useState(recipe ? recipe.directions : '');
-  const [servingCount] = useState(recipe ? recipe.servingCount : '');
-  const [sideDish] = useState(recipe ? recipe?.sideDish : '');
   const [ingredients, setIngredients] = useState<IIngredient[] | []>(
     recipe?.ingredients ? recipe.ingredients : [],
   );
@@ -43,10 +29,6 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     title: Yup.string()
       .required('Recept potřebuje název')
       .max(60, 'Název receptu nesmí být delší než 60 znakú.'),
-    preparationTime: Yup.number().required('Recept musí obsahovat dobu trvání'),
-    directions: Yup.string().required(
-      'Aby někdo ukuchtil tvúj recept, je nutné mu dát postup',
-    ),
   });
 
   const {
@@ -60,15 +42,6 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
 
   const handleUpdateRecipe = (recipeData: RecipeFormValues) => {
     setIsUploading(true);
-
-    const newRecipe = createRecipe(
-      recipeData.title,
-      recipeData.preparationTime,
-      ingredients,
-      recipeData.directions,
-      recipeData.servingCount,
-      recipeData.sideDish,
-    );
 
     const updateRecipe = async (updatedRecipe: IRecipeDetail) => {
       try {
@@ -87,20 +60,11 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
       }
     };
 
-    updateRecipe(newRecipe);
+    updateRecipe(createRecipe({ ...recipeData, ingredients: ingredients }));
   };
 
   const handleSaveRecipe = (recipeData: RecipeFormValues) => {
     setIsUploading(true);
-
-    const newRecipe = createRecipe(
-      recipeData.title,
-      recipeData.preparationTime,
-      ingredients,
-      recipeData.directions,
-      recipeData.servingCount,
-      recipeData.sideDish,
-    );
 
     const addRecipe = async (recipe: IRecipeDetail) => {
       try {
@@ -116,7 +80,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
       }
     };
 
-    addRecipe(newRecipe);
+    addRecipe(createRecipe({ ...recipeData, ingredients: ingredients }));
   };
 
   return (
@@ -142,6 +106,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
             type="text"
             id="recipe-title"
             aria-invalid={errors.title ? 'true' : 'false'}
+            defaultValue={recipe?.title}
             {...register('title')}
           />
           <div className="invalid-feedback">{errors.title?.message}</div>
@@ -154,6 +119,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
             type="text"
             id="recipeSideDish"
             placeholder=""
+            defaultValue={recipe?.sideDish}
             {...register('sideDish')}
           />
         </div>
@@ -164,7 +130,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
           <input
             type="number"
             id="preparationTime"
-            defaultValue={0}
+            defaultValue={recipe?.preparationTime}
             aria-invalid={errors.preparationTime ? 'true' : 'false'}
             {...register('preparationTime')}
           />
@@ -179,6 +145,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
           <input
             type="number"
             id="servingCount"
+            defaultValue={recipe?.servingCount}
             {...register('servingCount')}
           />
         </div>
