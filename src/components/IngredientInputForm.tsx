@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useEffect } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
 import useFetchIngredientList from '../hooks/useFetchIngredientList';
 import IIngredient from '../models/IIngredient';
@@ -13,26 +14,26 @@ interface Props {
 }
 
 const IngredientInputForm: FC<Props> = ({ ingredients, setIngredients }) => {
-  const [ingredientName, setIngredientName] = useState<string>('');
-  const [ingredientAmount, setIngredientAmount] = useState<string>('');
-  const [ingredientIsGroup, setIngredientIsGroup] = useState<boolean>(false);
-  const [ingredientAmountUnit, setIngredientAmountUnit] = useState<string>('');
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
+  const [ingredient, setIngredient] = useState<IIngredient | null>(null);
+  const [ingredientGroup, setIngredientGroup] = useState<IIngredient | null>(
+    null,
+  );
 
   const { data: availableIngredients } = useFetchIngredientList();
 
   const handleSaveIngredient = () => {
-    ingredients?.push({
-      amount: Number(ingredientAmount),
-      amountUnit: ingredientAmountUnit,
-      isGroup: ingredientIsGroup,
-      name: ingredientName,
-      timestamp: Date.now(),
-    });
+    if (ingredient) {
+      ingredients.push({ ...ingredient, timestamp: Date.now() });
+      setIngredient(null);
+    }
+  };
 
-    setIngredientName('');
-    setIngredientAmount('');
-    setIngredientAmountUnit('');
+  const handleSaveIngredientGroup = () => {
+    if (ingredientGroup) {
+      ingredients.push({ ...ingredientGroup, timestamp: Date.now() });
+      setIngredientGroup(null);
+    }
   };
 
   const handleRemoveIngredient = (timestamp?: number, id?: string) => {
@@ -49,8 +50,10 @@ const IngredientInputForm: FC<Props> = ({ ingredients, setIngredients }) => {
   };
 
   const ingredientSuggestions = availableIngredients
-    ? availableIngredients.filter((ingredient) =>
-        normalizeText(ingredient).includes(normalizeText(ingredientName)),
+    ? availableIngredients.filter((ingredientSuggestion) =>
+        normalizeText(ingredientSuggestion).includes(
+          normalizeText(ingredient?.name),
+        ),
       )
     : [];
 
@@ -66,62 +69,101 @@ const IngredientInputForm: FC<Props> = ({ ingredients, setIngredients }) => {
             name="ingredientName"
             placeholder="název"
             autoComplete="off"
-            onChange={({ target }) => setIngredientName(target.value)}
-            value={ingredientName}
+            onChange={({ target }) =>
+              setIngredient({ ...ingredient, name: target.value })
+            }
+            value={ingredient?.name}
             onFocus={() => setShowSuggestions(true)}
           />
-          {showSuggestions && ingredientName && (
+          {/* {showSuggestions && ingredient?.name && (
             <Autocomplete
               suggestionList={ingredientSuggestions}
               noSuggestionText="Neznámá ingredience"
-              setIngredientName={setIngredientName}
+              setIngredientName={() => {}}
               setShowSuggestions={setShowSuggestions}
             />
-          )}
+          )} */}
         </div>
         <Input
           type="number"
           name="ingredientAmount"
           placeholder="množství"
-          onChange={({ target }) => setIngredientAmount(target.value)}
-          value={ingredientAmount}
+          onChange={({ target }) =>
+            setIngredient({ ...ingredient, amount: target.valueAsNumber })
+          }
+          value={ingredient?.amount}
         />
         <Input
           type="text"
           name="ingredientUnit"
           placeholder="jednotka"
-          onChange={({ target }) => setIngredientAmountUnit(target.value)}
-          value={ingredientAmountUnit}
+          onChange={({ target }) =>
+            setIngredient({
+              ...ingredient,
+              amountUnit: target.value,
+            })
+          }
+          value={ingredient?.amountUnit}
         />
         <OutlineSmButton
-          disabled={!ingredientName}
+          disabled={!ingredient?.name}
           onClick={handleSaveIngredient}
         >
           Přidat
         </OutlineSmButton>
       </div>
-      <div className="added-ingredients px-4 my-6">
-        <ul>
-          {ingredients?.map(({ _id, name, amount, amountUnit, timestamp }) => (
-            <div
-              key={timestamp ? timestamp : _id}
-              className="ingredient grid grid-cols-12 items-center justify-between w-4/5 md:w-3/5 mb-2"
-            >
-              <input className="col-span-2" name="is-group" type="checkbox" />
-
-              <p className="col-span-8">
-                {name}: {amount} {amountUnit}
-              </p>
-              <OutlineSmButton
-                className="col-span-4"
-                onClick={() => handleRemoveIngredient(timestamp, _id)}
-              >
-                <MdDeleteOutline size="1.5em" />
-              </OutlineSmButton>
-            </div>
-          ))}
-        </ul>
+      <div className="ingredients-group mt-8">
+        <label className="block mb-1" htmlFor="ingredients-group">
+          Skupinová ingredience
+        </label>
+        <div className="flex gap-x-6">
+          <Input
+            type="text"
+            name="ingredientNameGroup"
+            placeholder="název"
+            autoComplete="off"
+            onChange={({ target }) =>
+              setIngredientGroup({
+                ...ingredientGroup,
+                name: target.value,
+                isGroup: true,
+              })
+            }
+            value={ingredientGroup?.name}
+            onFocus={() => setShowSuggestions(true)}
+          />
+          <OutlineSmButton
+            disabled={!ingredientGroup?.name}
+            onClick={handleSaveIngredientGroup}
+          >
+            Přidat
+          </OutlineSmButton>
+        </div>
       </div>
+
+      {ingredients.length > 0 && (
+        <div className="added-ingredients md:px-4 my-6">
+          {ingredients?.map(
+            ({ _id, name, amount, amountUnit, isGroup, timestamp }) => (
+              <div
+                key={timestamp ? timestamp : _id}
+                className="ingredient flex justify-between mb-2 max-w-md"
+              >
+                <p>
+                  <span className={isGroup ? 'font-bold' : ''}>{name}</span>
+                  {amount ? `: ${amount}` : ''} {amountUnit}
+                </p>
+                <OutlineSmButton
+                  cname=" max-w-max col-span-2 h-8"
+                  onClick={() => handleRemoveIngredient(timestamp, _id)}
+                >
+                  <MdDeleteOutline size="1.5em" />
+                </OutlineSmButton>
+              </div>
+            ),
+          )}
+        </div>
+      )}
     </div>
   );
 };

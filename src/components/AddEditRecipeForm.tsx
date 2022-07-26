@@ -86,9 +86,9 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
   return (
     <form id="recipeForm" onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-xl">{recipe ? 'Upravit' : 'Přidat'} recept</h2>
-      <div className="main-options my-4">
+      <div className="main-options my-4 flex flex-wrap gap-x-4 gap-y-2">
         <button
-          className="border-2 border-slate-700 px-4 py-1 text-slate-700 hover:text-white rounded hover:rounded-xl hover:bg-slate-600 transition-all duration-300 ease-in-out mr-8"
+          className="border-2 border-slate-700 px-4 py-1 text-slate-700 hover:text-white rounded hover:rounded-xl hover:bg-slate-600 transition-all duration-300 ease-in-out"
           disabled={isUploading}
           form="recipeForm"
           type="submit"

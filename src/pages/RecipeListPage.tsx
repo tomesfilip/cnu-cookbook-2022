@@ -82,13 +82,15 @@ const RecipeListPage = () => {
           />
         </div>
       </div>
-      {isLoading && <ClipLoader />}
-      {error && <Alert text={error.toString()} />}
-      {!error && sortedRecipes.length < 1 ? (
-        <h2>K zvoleným filtrom nebyly nalezeny žádné recepty</h2>
-      ) : (
-        <RecipesList recipes={sortedRecipes} />
-      )}
+      <div className="recipe-list-wrapper min-h-[40vh] flex items-center justify-center">
+        {isLoading && <ClipLoader />}
+        {error && <Alert text={error.toString()} />}
+        {!error && sortedRecipes.length < 1 ? (
+          <h2>K zvoleným filtrom nebyly nalezeny žádné recepty</h2>
+        ) : (
+          <RecipesList recipes={sortedRecipes} />
+        )}
+      </div>
     </motion.div>
   );
 };

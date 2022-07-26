@@ -30,7 +30,7 @@ const Input: FC<Props> = ({
       required={required}
       onChange={onChange}
       onFocus={onFocus}
-      value={value}
+      value={value ? value : ''}
       autoComplete={autoComplete}
     />
   );
