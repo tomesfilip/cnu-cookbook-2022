@@ -6,7 +6,7 @@ import { containerVariants } from '../framerVariants/containerVariants';
 const NotFoundPage = () => {
   return (
     <motion.div
-      className="container text-center bg-slate-600 p-16 rounded-lg text-white mb-12"
+      className="container text-center bg-slate-600 p-16 rounded-lg text-white my-12"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
