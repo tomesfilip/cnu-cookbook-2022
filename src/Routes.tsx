@@ -1,4 +1,5 @@
 import { Routes as RouterRoutes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 
 import RecipeListPage from './pages/RecipeListPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -6,7 +7,6 @@ import RecipeDetailPage from './pages/RecipeDetailPage';
 import AddRecipePage from './pages/AddRecipePage';
 import SideDishListPage from './pages/SideDishListPage';
 import EditRecipePage from './pages/EditRecipePage';
-import { AnimatePresence } from 'framer-motion';
 
 const Routes = () => {
   const location = useLocation();

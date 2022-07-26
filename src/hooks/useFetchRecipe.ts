@@ -1,5 +1,6 @@
 import { api } from '../api';
 import { useState, useEffect } from 'react';
+
 import IRecipeDetail from '../models/IRecipeDetail';
 
 const useFetchRecipe = (slug: string | undefined) => {

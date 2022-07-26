@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
-import { useEffect } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
-import useFetchIngredientList from '../hooks/useFetchIngredientList';
-import IIngredient from '../models/IIngredient';
-import { normalizeText } from '../utils/normalizeText';
-import Input from './atoms/Input';
-import OutlineSmButton from './atoms/OutlineSmButton';
+
+import useFetchIngredientList from '../../hooks/useFetchIngredientList';
+import IIngredient from '../../models/IIngredient';
+import Input from '../atoms/Input';
+import OutlineSmButton from '../atoms/OutlineSmButton';
 import Autocomplete from './Autocomplete';
+import { normalizeText } from '../../utils/normalizeText';
 
 interface Props {
   ingredients: IIngredient[];
@@ -75,14 +75,15 @@ const IngredientInputForm: FC<Props> = ({ ingredients, setIngredients }) => {
             value={ingredient?.name}
             onFocus={() => setShowSuggestions(true)}
           />
-          {/* {showSuggestions && ingredient?.name && (
+          {showSuggestions && ingredient?.name && (
             <Autocomplete
+              ingredient={ingredient}
               suggestionList={ingredientSuggestions}
               noSuggestionText="Neznámá ingredience"
-              setIngredientName={() => {}}
+              setIngredient={setIngredient}
               setShowSuggestions={setShowSuggestions}
             />
-          )} */}
+          )}
         </div>
         <Input
           type="number"

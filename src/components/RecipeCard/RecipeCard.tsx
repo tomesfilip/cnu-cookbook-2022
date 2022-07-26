@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import Placeholder from '../assets/img/food-placeholder.png';
-import { getNormalizedPrepTime } from '../utils/getNormalizedPrepTime';
+import Placeholder from '../../assets/img/food-placeholder.png';
+import RecipeCardAdditionalInfo from './RecipeCardAdditionalInfo';
 
 interface Props {
   title: string;
@@ -21,11 +21,11 @@ const RecipeCard: FC<Props> = ({ title, preparationTime, slug, sideDish }) => {
           alt={title}
         />
         <div className="recipe-card-body mt-2 px-3">
-          <h5 className="text-lg">{title}</h5>
-          <div className="text-sm flex flex-wrap">
-            <h6 className="mr-4">{getNormalizedPrepTime(preparationTime)}</h6>
-            <p>{sideDish}</p>
-          </div>
+          <h5 className="text-lg truncate">{title}</h5>
+          <RecipeCardAdditionalInfo
+            preparationTime={preparationTime}
+            sideDish={sideDish}
+          />
         </div>
       </Link>
     </div>

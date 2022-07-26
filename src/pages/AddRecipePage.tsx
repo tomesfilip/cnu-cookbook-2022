@@ -1,6 +1,6 @@
-import AddEditRecipeForm from '../components/AddEditRecipeForm';
 import { motion } from 'framer-motion';
 
+import AddEditRecipeForm from '../components/Form/AddEditRecipeForm';
 import { containerVariants } from '../framerVariants/containerVariants';
 
 const AddRecipePage = () => {

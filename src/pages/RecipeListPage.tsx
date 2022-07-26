@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import Select, { Theme } from 'react-select';
 import { motion } from 'framer-motion';
+import { ClipLoader } from 'react-spinners';
+import { MdOutlineAdd } from 'react-icons/md';
 
-import SearchInput from '../components/SearchInput';
-import RecipesList from '../components/RecipesList';
+import SearchInput from '../components/RecipeList/SearchInput';
+import RecipesList from '../components/RecipeList/RecipesList';
 import useFetchRecipeList from '../hooks/useFetchRecipeList';
 import FloatingButton from '../components/atoms/FloatingButton';
 import Alert from '../components/Alert';
-import { ClipLoader } from 'react-spinners';
-import PreparationTimeRangeFilter from '../components/PreparationTimeRangeFilter';
-import { MdOutlineAdd } from 'react-icons/md';
+import PreparationTimeRangeFilter from '../components/RecipeList/PreparationTimeRangeFilter';
 import { normalizeText } from '../utils/normalizeText';
 import { containerVariants } from '../framerVariants/containerVariants';
 
@@ -62,7 +62,7 @@ const RecipeListPage = () => {
       animate="visible"
       exit="exit"
     >
-      <h1 className="text-4xl text-stone-700">Recepty</h1>
+      <h1 className="text-4xl text-stone-700 mb-4">Recepty</h1>
       <FloatingButton linkTo="/pridat-recept">
         <MdOutlineAdd size="2em" />
       </FloatingButton>

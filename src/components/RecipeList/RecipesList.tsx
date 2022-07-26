@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import IRecipeList from '../models/IRecipeList';
-import RecipeCard from './RecipeCard';
+import IRecipeList from '../../models/IRecipeList';
+import RecipeCard from '../RecipeCard/RecipeCard';
 
 interface Props {
   recipes: IRecipeList[];

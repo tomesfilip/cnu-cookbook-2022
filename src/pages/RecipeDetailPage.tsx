@@ -3,7 +3,7 @@ import { ClipLoader } from 'react-spinners';
 import { motion } from 'framer-motion';
 import Alert from '../components/Alert';
 
-import RecipeDetailCard from '../components/RecipeDetailCard';
+import RecipeDetailCard from '../components/RecipeDetail/RecipeDetailCard';
 import useFetchRecipe from '../hooks/useFetchRecipe';
 import { containerVariants } from '../framerVariants/containerVariants';
 
@@ -28,6 +28,7 @@ const RecipeDetailPage = () => {
             preparationTime={recipe.preparationTime}
             ingredients={recipe.ingredients}
             directions={recipe.directions}
+            servingCount={recipe.servingCount}
             slug={slug}
             _id={recipe._id}
           />

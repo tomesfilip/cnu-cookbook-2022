@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { motion } from 'framer-motion';
 
-import AddEditRecipeForm from '../components/AddEditRecipeForm';
+import AddEditRecipeForm from '../components/Form/AddEditRecipeForm';
 import Alert from '../components/Alert';
 import useFetchRecipe from '../hooks/useFetchRecipe';
 import { containerVariants } from '../framerVariants/containerVariants';

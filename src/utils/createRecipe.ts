@@ -1,7 +1,5 @@
-import IIngredient from '../models/IIngredient';
 import IRecipeDetail from '../models/IRecipeDetail';
-import RecipeFormValues from '../models/RecipeFormValues';
-import IRecipeFormValues from '../models/RecipeFormValues';
+import IRecipeFormValues from '../models/IRecipeFormValues';
 import { getSlug } from './getSlug';
 
 export const createRecipe = ({
@@ -11,7 +9,7 @@ export const createRecipe = ({
   directions,
   servingCount,
   sideDish,
-}: RecipeFormValues): IRecipeDetail => {
+}: IRecipeFormValues): IRecipeDetail => {
   return {
     title,
     preparationTime,

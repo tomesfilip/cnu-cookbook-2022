@@ -1,22 +1,26 @@
 import React, { FC } from 'react';
 
+import IIngredient from '../../models/IIngredient';
+
 interface Props {
   suggestionList: string[];
-  setIngredientName: React.Dispatch<React.SetStateAction<string>>;
+  ingredient: IIngredient;
+  setIngredient: React.Dispatch<React.SetStateAction<IIngredient | null>>;
   setShowSuggestions: React.Dispatch<React.SetStateAction<boolean>>;
   noSuggestionText: string;
   limit?: number;
 }
 
 const Autocomplete: FC<Props> = ({
+  ingredient,
+  setIngredient,
   suggestionList,
-  setIngredientName,
   setShowSuggestions,
   noSuggestionText,
   limit = 5,
 }) => {
   const handleSuggestionClick = (suggestion: string) => {
-    setIngredientName(suggestion);
+    setIngredient({ ...ingredient, name: suggestion });
     setShowSuggestions(false);
   };
   return (

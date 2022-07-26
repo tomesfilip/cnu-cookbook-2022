@@ -1,6 +1,8 @@
-import OutlineSmButton from './atoms/OutlineSmButton';
-import '../assets/styles/ConfirmDialog.scss';
 import { FC } from 'react';
+
+import OutlineSmButton from './atoms/OutlineSmButton';
+
+import '../assets/styles/ConfirmDialog.scss';
 
 interface Props {
   confirmAction: () => void;

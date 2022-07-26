@@ -2,16 +2,18 @@ import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api';
-import IRecipeDetail from '../models/IRecipeDetail';
-import { createRecipe } from '../utils/createRecipe';
-import OutlineSmButton from './atoms/OutlineSmButton';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import '../assets/styles/RecipeForm.scss';
+
+import IIngredient from '../../models/IIngredient';
+import IRecipeDetail from '../../models/IRecipeDetail';
+import OutlineSmButton from '../atoms/OutlineSmButton';
 import IngredientInputForm from './IngredientInputForm';
-import IIngredient from '../models/IIngredient';
-import RecipeFormValues from '../models/RecipeFormValues';
+import IRecipeFormValues from '../../models/IRecipeFormValues';
+import { api } from '../../api';
+import { createRecipe } from '../../utils/createRecipe';
+
+import '../../assets/styles/RecipeForm.scss';
 
 interface Props {
   recipe?: IRecipeDetail;
@@ -35,12 +37,12 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RecipeFormValues>({ resolver: yupResolver(validationSchema) });
-  const onSubmit = (data: RecipeFormValues) => {
+  } = useForm<IRecipeFormValues>({ resolver: yupResolver(validationSchema) });
+  const onSubmit = (data: IRecipeFormValues) => {
     recipe ? handleUpdateRecipe(data) : handleSaveRecipe(data);
   };
 
-  const handleUpdateRecipe = (recipeData: RecipeFormValues) => {
+  const handleUpdateRecipe = (recipeData: IRecipeFormValues) => {
     setIsUploading(true);
 
     const updateRecipe = async (updatedRecipe: IRecipeDetail) => {
@@ -63,7 +65,7 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
     updateRecipe(createRecipe({ ...recipeData, ingredients: ingredients }));
   };
 
-  const handleSaveRecipe = (recipeData: RecipeFormValues) => {
+  const handleSaveRecipe = (recipeData: IRecipeFormValues) => {
     setIsUploading(true);
 
     const addRecipe = async (recipe: IRecipeDetail) => {
@@ -160,8 +162,10 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
         </label>
         <textarea
           className="border-2 rounded-lg px-2 py-1 w-full"
+          rows={10}
           id="directions"
           aria-invalid={errors.directions ? 'true' : 'false'}
+          defaultValue={recipe?.directions}
           {...register('directions')}
         />
         <div className="invalid-feedback">{errors.directions?.message}</div>

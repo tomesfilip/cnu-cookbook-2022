@@ -1,9 +1,9 @@
 import { ClipLoader } from 'react-spinners';
+import { motion } from 'framer-motion';
+
 import Alert from '../components/Alert';
 import SideDishList from '../components/SideDishList';
 import useFetchSideDishList from '../hooks/useFetchSideDishList';
-import { motion } from 'framer-motion';
-
 import { containerVariants } from '../framerVariants/containerVariants';
 
 const SideDishListPage = () => {
