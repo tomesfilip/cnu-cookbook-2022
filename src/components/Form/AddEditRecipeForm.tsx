@@ -33,7 +33,9 @@ const AddEditRecipeForm: FC<Props> = ({ recipe }) => {
       .max(60, 'Název receptu nesmí být delší než 60 znakú.'),
     preparationTime: Yup.number()
       .required('Při kuchtení strávíš nejaký čas ne?')
-      .positive()
+      .positive(
+        'Čas je sice relativný, ale měl by si ho udat v kladných hodnotách.',
+      )
       .transform((value) => (isNaN(value) ? undefined : value))
       .nullable(),
   });
