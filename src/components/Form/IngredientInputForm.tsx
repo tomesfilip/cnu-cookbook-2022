@@ -117,7 +117,7 @@ const IngredientInputForm: FC<Props> = ({ ingredients, setIngredients }) => {
         <label className="block mb-1" htmlFor="ingredients-group">
           Skupinová ingredience
         </label>
-        <div className="flex gap-x-6">
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
           <Input
             type="text"
             name="ingredientNameGroup"

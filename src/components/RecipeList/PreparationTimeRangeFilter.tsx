@@ -10,7 +10,7 @@ const PreparationTimeRangeFilter: FC<Props> = ({
   setMaxPrepTime,
 }) => {
   return (
-    <div className="preparation-time-range-filter accent-slate-600 md:mx-8">
+    <div className="preparation-time-range-filter accent-slate-600 md:mx-8 my-4 md:my-0">
       <label htmlFor="prepTimeInput" className="form-label block">
         Maximální čas přípravy (min):
         <span className="inline-block ml-1 w-10"> {maxPrepTime}</span>

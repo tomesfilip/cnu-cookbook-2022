@@ -11,7 +11,7 @@ const Layout: FC<Props> = ({ children }) => {
   return (
     <>
       <Header />
-      <div className="container mx-auto px-4 mt-4">{children}</div>
+      <div className="container mx-auto px-4">{children}</div>
       <Footer />
     </>
   );

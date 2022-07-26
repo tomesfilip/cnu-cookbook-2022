@@ -9,7 +9,9 @@ const SideDishList: FC<Props> = ({ sideDishList }) => {
     <div className="container mx-auto px-4 md:px-0">
       <ul className="bg-slate-100 p-4 rounded-lg">
         {sideDishList.map((sideDish) => (
-          <li key={sideDish}>{sideDish}</li>
+          <li key={sideDish} className="truncate">
+            {sideDish}
+          </li>
         ))}
       </ul>
     </div>

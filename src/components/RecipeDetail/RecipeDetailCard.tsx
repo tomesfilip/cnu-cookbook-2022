@@ -25,7 +25,6 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
   slug,
   _id,
 }) => {
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const [servingCountTemp, setServingCountTemp] = useState<number>(
     servingCount ? servingCount : 1,
@@ -33,20 +32,17 @@ const RecipeDetailCard: FC<IRecipeDetail> = ({
   const navigate = useNavigate();
 
   const handleDeteleRecipe = async () => {
-    setIsDeleting(true);
     try {
-      const response = await api.delete(`/recipes/${_id}`);
-      setIsDeleting(false);
+      await api.delete(`/recipes/${_id}`);
       toast.success('Recept úspěšne zmazán.');
       navigate('/');
     } catch (err) {
       toast.error(`Chybička se vloudila: ${err}`);
-      setIsDeleting(false);
     }
   };
 
   return (
-    <div className="recipe-detail">
+    <div className="recipe-detail my-8">
       {isDialogVisible && (
         <ConfirmDialog
           confirmAction={handleDeteleRecipe}
